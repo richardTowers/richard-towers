@@ -1,0 +1,172 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Richard Towers - About</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width">
+
+	<!--
+	<link rel="stylesheet/less" href="less/style.less">
+	<script src="js/libs/less-1.3.0.min.js"></script>
+	-->
+
+	<link rel="stylesheet" href="../css/style.css">
+
+	<script src="../js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">richard-towers.com</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="..">Home</a></li>
+              <li class="active"><a href="#">About</a></li>
+              <li><a href="../blog">Serious Blog</a></li>
+              <li><a href="#paparazi">Silly Blog</a></li>
+              <li class="dropdown">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Meta<b class="caret"></b></a>
+	              <ul class="dropdown-menu">
+	                <li><a href="https://github.com/richardTowers/richard-towers/">View on Github</a></li>
+	                <li><a href="#">Annotated Source</a></li>
+	                <li><a href="#">Playground</a></li>
+	              </ul>
+	           </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!--[if lt IE 7]>
+        <div class="row">
+          <div class="span8 offset2 alert">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <h4>Woah there!</h4>
+            <p class="chromeframe">Your browser is <em>ridiculously</em> old. <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
+            <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to view this site properly.</p>
+          </div>
+        </div>
+      <![endif]-->
+
+      <div class="hero-unit">
+        <h1>Hello!</h1>
+        <p>I'm Richard. I write software.</p>
+<pre class="prettyprint linenums">
+        .section        __TEXT,__text,regular,pure_instructions
+        .globl  _main
+        .align  4, 0x90
+_main:
+Leh_func_begin1:
+        pushq   %rbp
+Ltmp0:
+        movq    %rsp, %rbp
+Ltmp1:
+        leaq    L_.str(%rip), %rdi
+        popq    %rbp
+        jmp     _puts  # TAILCALL
+Leh_func_end1:
+
+        .section        __TEXT,__cstring,cstring_literals
+L_.str:
+        .asciz   "Hello World!"
+
+        .section        __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
+EH_frame0:
+Lsection_eh_frame:
+Leh_frame_common:
+Lset0 = Leh_frame_common_end-Leh_frame_common_begin
+        .long   Lset0
+Leh_frame_common_begin:
+        .long   0
+        .byte   1
+        .asciz   "zR"
+        .byte   1
+        .byte   120
+        .byte   16
+        .byte   1
+        .byte   16
+        .byte   12
+        .byte   7
+        .byte   8
+        .byte   144
+        .byte   1
+        .align  3
+Leh_frame_common_end:
+        .globl  _main.eh
+_main.eh:
+Lset1 = Leh_frame_end1-Leh_frame_begin1
+        .long   Lset1
+Leh_frame_begin1:
+Lset2 = Leh_frame_begin1-Leh_frame_common
+        .long   Lset2
+Ltmp2:
+        .quad   Leh_func_begin1-Ltmp2
+Lset3 = Leh_func_end1-Leh_func_begin1
+        .quad   Lset3
+        .byte   0
+        .byte   4
+Lset4 = Ltmp0-Leh_func_begin1
+        .long   Lset4
+        .byte   14
+        .byte   16
+        .byte   134
+        .byte   2
+        .byte   4
+Lset5 = Ltmp1-Ltmp0
+        .long   Lset5
+        .byte   13
+        .byte   6
+        .align  3
+Leh_frame_end1:
+</pre>
+        <p><a class="btn btn-primary btn-large" href="..">Enough narcissism already &raquo;</a></p>
+      </div>
+	
+      <div class="row">
+        <div class="span4">
+          Yeah, I know there's nothing here but hello world in x86 assembly code. I'm not so good at narcissism it transpires.
+        </div>
+      </div>
+      <hr>
+
+      <footer>
+        <p>Copyleft Richard Towers 2012. All wrongs reserved.</p>
+        <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      </footer>
+
+    </div> <!-- /container -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+
+<!-- scripts. Todo: the build script needs to know about these. -->
+<script src="../js/libs/prettify/prettify.js"></script>
+<script src="../js/libs/bootstrap/bootstrap.min.js"></script>
+<script src="../js/script.js"></script>
+<!-- end scripts-->
+
+<script>
+	var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
