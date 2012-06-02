@@ -1,2 +1,2 @@
 $ ->
-  prettyPrint()
+  window.prettyPrint()
