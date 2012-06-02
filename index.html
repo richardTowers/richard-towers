@@ -17,14 +17,12 @@
 	<link rel="stylesheet/less" href="less/style.less">
 	<script src="js/libs/less-1.3.0.min.js"></script>
 	-->
-	
 
 	<link rel="stylesheet" href="css/style.css">
 
 	<script src="js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
 </head>
 <body>
-<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -43,7 +41,7 @@
               <li class="dropdown">
 	              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Meta<b class="caret"></b></a>
 	              <ul class="dropdown-menu">
-	                <li><a href="#">View on Github</a></li>
+	                <li><a href="https://github.com/richardTowers/richard-towers/">View on Github</a></li>
 	                <li><a href="#">Annotated Source</a></li>
 	                <li><a href="#">Playground</a></li>
 	              </ul>
@@ -56,7 +54,17 @@
 
     <div class="container">
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
+      <!--[if lt IE 7]>
+        <div class="row">
+          <div class="span8 offset2 alert">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <h4>Woah there!</h4>
+            <p class="chromeframe">Your browser is <em>ridiculously</em> old. <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
+            <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to view this site properly.</p>
+          </div>
+        </div>
+      <![endif]-->
+
       <div class="hero-unit">
         <h1>Hello!</h1>
         <p>I'm Richard. I write software.</p>
@@ -68,7 +76,7 @@ int main(void) {
         <p><a class="btn btn-primary btn-large" href="#about">More narcissism &raquo;</a></p>
       </div>
 	
-      <!-- Example row of columns -->
+      <!-- Example row of columns -->      
       <div class="row">
         <div class="span4">
           <h2>This Site</h2>
@@ -114,7 +122,7 @@ int main(void) {
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 
 <!-- scripts. Todo: the build script needs to know about these. -->
-<script type="text/javascript" src="js/libs/prettify/prettify.js"></script>
+<script src="js/libs/prettify/prettify.js"></script>
 <script src="js/libs/bootstrap/bootstrap.min.js"></script>
 <script src="js/script.js"></script>
 <!-- end scripts-->
