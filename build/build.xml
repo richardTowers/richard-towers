@@ -508,8 +508,8 @@
 
   <target name="-js.mylibs.concat" depends="-js.all.minify" description="(PRIVATE) Concatenates the JS files in dir.js.mylibs">
       <echo message="Concatenating JS libraries"/>
-      <concat destfile="./${dir.intermediate}/${dir.js}/otherscripts-concat.js" overwrite="no">
-        <fileset dir="./${dir.intermediate}/${dir.js}" excludes="${file.js.bypass}, ${slug.libs}/*">
+      <concat destfile="./${dir.intermediate}/${dir.js.mylibs}/otherscripts-concat.js" overwrite="no">
+        <fileset dir="./${dir.intermediate}/${dir.js.mylibs}" excludes="${file.js.bypass}, ${slug.libs}/*">
           <exclude name="${file.root.script}"/>
           <exclude name="plugins.js"/>
           <exclude name="scripts-concat.js"/>
@@ -585,6 +585,16 @@
 
       <copy todir="${dir.publish}/${dir.js}">
         <fileset dir="${dir.intermediate}/${dir.js}" includes="${file.js.bypass}, ${slug.libs}/*">
+            <exclude name="scripts-concat.js"/>
+            <exclude name="scripts-concat.min.js"/>
+            <exclude name="otherscripts-concat.js"/>
+            <exclude name="plugins.js"/>
+            <exclude name="${file.root.script}"/>
+        </fileset>
+      </copy>
+      
+      <copy todir="${dir.publish}/${dir.js.mylibs}">
+        <fileset dir="${dir.intermediate}/${dir.js.mylibs}" includes="${file.js.bypass}, ${slug.libs}/*">
             <exclude name="scripts-concat.js"/>
             <exclude name="scripts-concat.min.js"/>
             <exclude name="otherscripts-concat.js"/>
