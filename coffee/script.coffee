@@ -26,21 +26,17 @@ For more information, please refer to http://unlicense.org/
 ###
 $ ->
   window.prettyPrint()
-  window.mandelbrotCanvas = document.getElementById 'mandelbrot'
-  createCanvas(window.mandelbrotCanvas)
-  setCanvasSize(window.mandelbrotCanvas)
-  drawMandelbrot(window.mandelbrotCanvas)
+  canvas = document.getElementById 'mandelbrot'
+  if canvas?
+    context = canvas.getContext '2d'
+    window.mandelbrotContext = context
+  setCanvasSize(context)
+  drawMandelbrot(context)
     
 $(window).resize ->
-  setCanvasSize(window.mandelbrotCanvas)
-
-createCanvas = (canvas) ->
-  if canvas?
-    context = canvas.getContext '2d'
+  setCanvasSize(window.mandelbrotContext)
     
-drawMandelbrot = (canvas) ->
-  if canvas?
-    context = canvas.getContext '2d'
+drawMandelbrot = (context) ->
     width = context.canvas.width
     height = context.canvas.height
     pixels = context.createImageData(width, height)
@@ -52,9 +48,7 @@ getEscapeTimeAtPixel = (row, column) ->
   return row + column
       
 
-setCanvasSize = (canvas) ->
-  if canvas?
-    context = canvas.getContext '2d'
-    width = $(canvas).parent().width()
+setCanvasSize = (context) ->
+    width = $('#mandelbrot').parent().width()
     context.canvas.width = width
     context.canvas.height = width * 2/3.0
