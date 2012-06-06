@@ -26,29 +26,5 @@ For more information, please refer to http://unlicense.org/
 ###
 $ ->
   window.prettyPrint()
-  canvas = document.getElementById 'mandelbrot'
-  if canvas?
-    context = canvas.getContext '2d'
-    window.mandelbrotContext = context
-  setCanvasSize(context)
-  drawMandelbrot(context)
-    
-$(window).resize ->
-  setCanvasSize(window.mandelbrotContext)
-    
-drawMandelbrot = (context) ->
-    width = context.canvas.width
-    height = context.canvas.height
-    pixels = context.createImageData(width, height)
-    escapeTimes = []
-    escapeTimes.push getEscapeTimeAtPixel row, column for row in [1..height] for column in [1..width]
-    escapeTimes
 
-getEscapeTimeAtPixel = (row, column) ->
-  return row + column
-      
-
-setCanvasSize = (context) ->
-    width = $('#mandelbrot').parent().width()
-    context.canvas.width = width
-    context.canvas.height = width * 2/3.0
+#@codekit-append "mandelbrot.coffee"
