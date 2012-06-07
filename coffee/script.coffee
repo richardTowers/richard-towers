@@ -26,5 +26,4 @@ For more information, please refer to http://unlicense.org/
 ###
 $ ->
   window.prettyPrint()
-
-#@codekit-append "mandelbrot.coffee"
+  new Mandelbrot 'mandelbrot'
