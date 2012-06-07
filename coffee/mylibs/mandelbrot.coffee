@@ -15,7 +15,7 @@ class Mandelbrot
     # Attach resize code to resive event
     $(window).resize ->
       clearTimeout resizeTimer
-      resizeTimer = 
+      resizeTimer =
         setTimeout setCanvasSize(canvasId, context), 100 
       return resizeTimer
       
