@@ -17,9 +17,12 @@
           return drawMandelbrot(context);
         }
       });
-      window.onresize = function() {
-        return setCanvasSize(canvasId, context);
-      };
+      $(window).resize(function() {
+        var resizeTimer;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(setCanvasSize(canvasId, context), 100);
+        return resizeTimer;
+      });
     }
 
     drawMandelbrot = function(context) {
