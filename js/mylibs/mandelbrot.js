@@ -3,7 +3,7 @@
   var Mandelbrot;
 
   Mandelbrot = (function() {
-    var drawEscapeTimes, drawSetInMainThread, drawSetWithWorker, setCanvasSize;
+    var drawEscapeTimes, drawSetInMainThread, drawSetWithWorker, getColor, setCanvasSize, setPixel;
 
     function Mandelbrot() {
       var self;
@@ -14,7 +14,7 @@
         bottom: -1,
         right: 1
       };
-      this.maxIterations = 100;
+      this.maxIterations = 30;
       if (window.Modernizr.webworkers && window.JSON) {
         this.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js');
         this.drawSet = function(context, maxIterations) {
@@ -26,11 +26,11 @@
     }
 
     Mandelbrot.prototype.run = function(canvasId) {
-      var canvas, context, mi, self;
+      var canvasElement, context, mi, self;
       self = this;
-      canvas = document.getElementById(canvasId);
-      if (canvas != null) {
-        context = canvas.getContext('2d');
+      canvasElement = document.getElementById(canvasId);
+      if (canvasElement != null) {
+        context = canvasElement.getContext('2d');
         setCanvasSize(canvasId, context);
         this.drawSet(context, this.maxIterations);
         mi = $('#maxIterationsButton').click(function() {
@@ -40,8 +40,11 @@
             self.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js');
           }
           $('#mandelbrotProgress').find('.bar').width('0%');
+          $('#mandelbrotProgress').addClass('progress-striped');
+          $('#mandelbrotProgress').addClass('active');
+          $('#mandelbrotProgress').removeClass('progress-success');
           self.drawSet(context, self.maxIterations);
-          return 0;
+          return false;
         });
         return $(window).resize(function() {
           var resizeTimer;
@@ -55,21 +58,7 @@
     };
 
     drawSetWithWorker = function(worker, context, box, maxIterations) {
-      var height, message, progressBar, width;
-      progressBar = $('#mandelbrotProgress');
-      progressBar.show();
-      worker.addEventListener('message', (function(e) {
-        var data;
-        data = JSON.parse(e.data);
-        switch (data.message) {
-          case "progress":
-            return progressBar.find('.bar').css('width', data.value + '%');
-          case "success":
-            return drawEscapeTimes(context, data.value);
-          default:
-            return window.alert("Unrecognised message from worker");
-        }
-      }), false);
+      var height, message, width;
       width = context.canvas.width;
       height = context.canvas.height;
       message = JSON.stringify({
@@ -84,6 +73,21 @@
         },
         maxIterations: maxIterations
       });
+      worker.addEventListener('message', (function(e) {
+        var data;
+        data = JSON.parse(e.data);
+        switch (data.message) {
+          case "progress":
+            return $('#mandelbrotProgress .bar').css('width', data.value + '%');
+          case "success":
+            drawEscapeTimes(context, data.value, maxIterations);
+            $('#mandelbrotProgress').removeClass('progress-striped');
+            $('#mandelbrotProgress').removeClass('active');
+            return $('#mandelbrotProgress').addClass('progress-success');
+          default:
+            return window.alert("Unrecognised message from worker");
+        }
+      }), false);
       return worker.postMessage(message);
     };
 
@@ -91,8 +95,53 @@
       return 0;
     };
 
-    drawEscapeTimes = function(context, escapeTimes) {
-      return 0;
+    drawEscapeTimes = function(context, escapeTimes, maxIterations) {
+      var height, imageData, row, width, _fn, _i;
+      width = context.canvas.width;
+      height = context.canvas.height;
+      imageData = context.createImageData(width, height);
+      _fn = function(row) {
+        var column, _fn1, _j;
+        _fn1 = function(column) {
+          var color;
+          color = getColor(escapeTimes[row][column], maxIterations);
+          setPixel(imageData, column, row, color.r, color.g, color.b, 255);
+          return 0;
+        };
+        for (column = _j = 0; 0 <= width ? _j <= width : _j >= width; column = 0 <= width ? ++_j : --_j) {
+          _fn1(column);
+        }
+        return 0;
+      };
+      for (row = _i = 0; 0 <= height ? _i <= height : _i >= height; row = 0 <= height ? ++_i : --_i) {
+        _fn(row);
+      }
+      return context.putImageData(imageData, 0, 0);
+    };
+
+    getColor = function(escapeTime, maxIterations) {
+      if (escapeTime >= maxIterations) {
+        return {
+          r: 0,
+          g: 0,
+          b: 0
+        };
+      } else {
+        return {
+          r: 255,
+          g: 255,
+          b: 255
+        };
+      }
+    };
+
+    setPixel = function(imageData, x, y, r, g, b, a) {
+      var index;
+      index = (x + y * imageData.width) * 4;
+      imageData.data[index + 0] = r;
+      imageData.data[index + 1] = g;
+      imageData.data[index + 2] = b;
+      return imageData.data[index + 3] = a;
     };
 
     setCanvasSize = function(canvasId, context) {

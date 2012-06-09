@@ -9,7 +9,7 @@ class Mandelbrot
       bottom: -1
       right: 1
     
-    @maxIterations = 100
+    @maxIterations = 30
     
     if window.Modernizr.webworkers and window.JSON
       # Use a web worker to do the magic
@@ -21,9 +21,9 @@ class Mandelbrot
   
   run: (canvasId) ->
     self = this
-    canvas = document.getElementById canvasId
-    if canvas?
-      context = canvas.getContext '2d'
+    canvasElement = document.getElementById canvasId
+    if canvasElement?
+      context = canvasElement.getContext '2d'
       setCanvasSize canvasId, context
       @drawSet context, @maxIterations
       
@@ -33,8 +33,11 @@ class Mandelbrot
           self.worker.terminate()
           self.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js')
         $('#mandelbrotProgress').find('.bar').width('0%')
+        $('#mandelbrotProgress').addClass 'progress-striped'
+        $('#mandelbrotProgress').addClass 'active'
+        $('#mandelbrotProgress').removeClass 'progress-success'
         self.drawSet context, self.maxIterations
-        return 0
+        return false
         
       
       # Attach resize code to resive event
@@ -45,19 +48,6 @@ class Mandelbrot
     
     
   drawSetWithWorker = (worker, context, box, maxIterations) ->
-    progressBar = $('#mandelbrotProgress')
-    progressBar.show()
-    worker.addEventListener 'message',
-      ((e) ->
-        data = JSON.parse e.data
-        switch data.message
-          when "progress"
-            progressBar.find('.bar').css 'width', data.value+'%'
-          when "success"
-            drawEscapeTimes context, data.value
-          else
-            window.alert "Unrecognised message from worker"),
-      false
     width = context.canvas.width
     height = context.canvas.height
     message = JSON.stringify
@@ -70,14 +60,58 @@ class Mandelbrot
         bottom:box.bottom
         right:box.right
       maxIterations:maxIterations
+      
+    worker.addEventListener 'message',
+      ((e) ->
+        data = JSON.parse e.data
+        switch data.message
+          when "progress"
+            $('#mandelbrotProgress .bar').css 'width', data.value+'%'
+          when "success"
+            drawEscapeTimes context, data.value, maxIterations
+            $('#mandelbrotProgress').removeClass 'progress-striped'
+            $('#mandelbrotProgress').removeClass 'active'
+            $('#mandelbrotProgress').addClass 'progress-success'
+          else
+            window.alert "Unrecognised message from worker"),
+      false
+    
     worker.postMessage message
       
   drawSetInMainThread = (context) ->
     return 0
       
-  drawEscapeTimes = (context, escapeTimes) ->
-    return 0
+      
+  drawEscapeTimes = (context, escapeTimes, maxIterations) ->
+    width = context.canvas.width
+    height = context.canvas.height
+    imageData = context.createImageData width, height
+    for row in [0..height]
+      do (row) ->
+        for column in [0..width]
+          do(column) ->
+            color = getColor escapeTimes[row][column], maxIterations
+            setPixel imageData, column, row, color.r, color.g, color.b, 255
+            return 0
+        return 0
+    context.putImageData imageData, 0, 0
   
+  getColor = (escapeTime, maxIterations) ->
+    if escapeTime >= maxIterations
+      r: 0
+      g: 0
+      b: 0
+    else
+      r: 255
+      g: 255
+      b: 255
+  
+  setPixel = (imageData, x, y, r, g, b, a) ->
+    index = (x + y * imageData.width) * 4
+    imageData.data[index+0] = r
+    imageData.data[index+1] = g
+    imageData.data[index+2] = b
+    imageData.data[index+3] = a
   
   setCanvasSize = (canvasId, context) ->
     width = $('#' + canvasId).parent().width()

@@ -28,6 +28,7 @@ $ = jQuery
 
 $ ->
   window.prettyPrint()
+  $('.toolBase').tooltip()
   if $('#mandelbrot').length
     mandelbrot = new window.Mandelbrot()
     mandelbrot.run 'mandelbrot'
