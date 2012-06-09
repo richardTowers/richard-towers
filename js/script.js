@@ -5,7 +5,18 @@
   Mandelbrot = (function() {
     var drawMandelbrot, getEscapeTimeAtPixel, setCanvasSize;
 
-    function Mandelbrot(canvasId) {
+    function Mandelbrot() {
+      this.topLeft = {
+        top: 1,
+        left: -2
+      };
+      this.bottomRight = {
+        bottom: -1,
+        right: 1
+      };
+    }
+
+    Mandelbrot.prototype.initialise = function(canvasId) {
       var context;
       context = null;
       $(function() {
@@ -14,37 +25,42 @@
         if (canvas != null) {
           context = canvas.getContext('2d');
           setCanvasSize(canvasId, context);
-          return drawMandelbrot(context);
+          drawMandelbrot(context);
         }
+        return 0;
       });
-      $(window).resize(function() {
+      return $(window).resize(function() {
         var resizeTimer;
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(setCanvasSize(canvasId, context), 100);
-        return resizeTimer;
+        return 0;
       });
-    }
+    };
 
     drawMandelbrot = function(context) {
-      var escapeTimes, height, pixels, width;
+      var column, escapeTimes, height, pixels, row, width, _i, _j;
       width = context.canvas.width;
       height = context.canvas.height;
       pixels = context.createImageData(width, height);
       escapeTimes = [];
-      context.fillStyle = 'red';
-      context.fillRect(30, 30, 50, 50);
-      return escapeTimes;
+      for (column = _i = 1; 1 <= width ? _i <= width : _i >= width; column = 1 <= width ? ++_i : --_i) {
+        for (row = _j = 1; 1 <= height ? _j <= height : _j >= height; row = 1 <= height ? ++_j : --_j) {
+          escapeTimes.push(getEscapeTimeAtPixel(width, height));
+        }
+      }
+      return 0;
     };
 
-    getEscapeTimeAtPixel = function(row, column) {
-      return row + column;
+    getEscapeTimeAtPixel = function(real, imaginary) {
+      return 0;
     };
 
     setCanvasSize = function(canvasId, context) {
       var width;
       width = $('#' + canvasId).parent().width();
       context.canvas.width = width;
-      return context.canvas.height = width * 2 / 3.0;
+      context.canvas.height = width * 2 / 3.0;
+      return 0;
     };
 
     return Mandelbrot;
@@ -86,8 +102,13 @@
 
 
   $(function() {
+    var mandelbrot;
     window.prettyPrint();
-    return new Mandelbrot('mandelbrot');
+    if ($('#mandelbrot').length) {
+      mandelbrot = new Mandelbrot();
+      mandelbrot.initialise('mandelbrot');
+    }
+    return 0;
   });
 
 }).call(this);

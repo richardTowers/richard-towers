@@ -1,40 +1,46 @@
 class Mandelbrot
   
   #Constructor
+  constructor: () ->
+    @topLeft = 
+      top: 1
+      left: -2
+    @bottomRight = 
+      bottom: -1
+      right: 1
   
-  constructor: (canvasId) ->
-    # Attach initialising code to ready event
+  initialise: (canvasId) ->
     context = null
+    # Attach initialising code to ready event
     $ ->
       canvas = document.getElementById canvasId
       if canvas?
         context = canvas.getContext '2d'
         setCanvasSize(canvasId, context)
         drawMandelbrot(context)
+      return 0
     
     # Attach resize code to resive event
     $(window).resize ->
       clearTimeout resizeTimer
       resizeTimer =
         setTimeout setCanvasSize(canvasId, context), 100 
-      return resizeTimer
+      return 0
       
-  
   #Private methods
   drawMandelbrot = (context) ->
     width = context.canvas.width
     height = context.canvas.height
     pixels = context.createImageData width, height
     escapeTimes = []
-    #escapeTimes.push getEscapeTimeAtPixel row, column for row in [1..height] for column in [1..width]
-    context.fillStyle = 'red'
-    context.fillRect 30, 30, 50, 50 
-    return escapeTimes
+    escapeTimes.push getEscapeTimeAtPixel width, height for row in [1..height] for column in [1..width]
+    return 0
   
-  getEscapeTimeAtPixel = (row, column) ->
-    return row + column
+  getEscapeTimeAtPixel = (real, imaginary) ->
+    return 0
         
   setCanvasSize = (canvasId, context) ->
     width = $('#' + canvasId).parent().width()
     context.canvas.width = width
     context.canvas.height = width * 2/3.0
+    return 0

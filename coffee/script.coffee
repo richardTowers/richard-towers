@@ -26,4 +26,7 @@ For more information, please refer to http://unlicense.org/
 ###
 $ ->
   window.prettyPrint()
-  new Mandelbrot 'mandelbrot'
+  if $('#mandelbrot').length
+    mandelbrot = new Mandelbrot()
+    mandelbrot.initialise 'mandelbrot'
+  return 0
