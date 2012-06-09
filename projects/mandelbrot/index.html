@@ -31,7 +31,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="..">richard-towers.com</a>
+          <a class="brand" href="../..">richard-towers.com</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li><a href="../..">Home</a></li>
@@ -71,15 +71,31 @@
         </div>
       <![endif]-->
       
+      <div class="row no-webworkers-message">
+        <div class="span8 offset2 alert alert-info">
+          <a class="close" data-dismiss="alert" href="#">×</a>
+          <h4>Hmmm...</h4>
+          <p>Your browser doesn't support <a href="http://en.wikipedia.org/wiki/Web_worker">webworkers</a>.
+          This project will still work, but it's going to be pretty slow and might cause your browser to freeze temporarily.
+          Perhaps you should consider <a href="http://browsehappy.com/">upgrading to a different browser</a>
+          that <a href="http://caniuse.com/webworkers">supports web workers.</a>.</p>
+        </div>
+      </div>
+      
       <div class="row bitsAndBobs">
         <div class="span3">
-          <form class="well">
+          <div class="well">
             <h2>Settings</h2>
-            <label for="maxiterations">Maximum Iterations</label><input id="maxiterations" type="number" value="100">
-            <button class="btn">Refresh &raquo;</button>
-          </form>
+            <label for="maxiterations">Maximum Iterations</label><input id="maxIterations" type="number" value="100">
+            <button id="maxIterationsButton" class="btn">Refresh &raquo;</button>
+          </div>
         </div>
-        <div class="span8"><canvas id="mandelbrot"></div>
+        <div class="span8">
+          <div id="mandelbrotProgress" class="progress instant-transition">
+            <div class="bar"></div>
+          </div>
+          <canvas id="mandelbrot">
+        </div>
       </div>
       
       
@@ -95,6 +111,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 
+<script src="../../js/mylibs/mandelbrot.js"></script>
 <script src="../../js/mylibs/prettify.js"></script>
 <script src="../../js/libs/bootstrap.min.js"></script>
 

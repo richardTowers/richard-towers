@@ -24,9 +24,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to http://unlicense.org/
 ###
+$ = jQuery
+
 $ ->
   window.prettyPrint()
   if $('#mandelbrot').length
-    mandelbrot = new Mandelbrot()
-    mandelbrot.initialise 'mandelbrot'
+    mandelbrot = new window.Mandelbrot()
+    mandelbrot.run 'mandelbrot'
   return 0
