@@ -10,7 +10,7 @@
  *    0 <= saturation, value <= 1 (values will be cropped to fit)
  *    0 <= red, green, blue <= 255 (values will be cropped to fit)
 ###
-class colorConverter
+class ColorConverter
   # Wrappers for conveinence
   colorToHsv: (color) ->
     if color.h? and color.s? and color.v? then return color
@@ -86,3 +86,5 @@ class colorConverter
     h: hue
     s: sat
     v: val
+    
+window.ColorConverter = ColorConverter

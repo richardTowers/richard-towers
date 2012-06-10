@@ -15,14 +15,14 @@
 
 
 (function() {
-  var colorConverter;
+  var ColorConverter;
 
-  colorConverter = (function() {
+  ColorConverter = (function() {
     var hsv, hsvToRgb, rgb, rgbToHsv;
 
-    function colorConverter() {}
+    function ColorConverter() {}
 
-    colorConverter.prototype.colorToHsv = function(color) {
+    ColorConverter.prototype.colorToHsv = function(color) {
       if ((color.h != null) && (color.s != null) && (color.v != null)) {
         return color;
       }
@@ -33,7 +33,7 @@
       }
     };
 
-    colorConverter.prototype.colorToRgb = function(color) {
+    ColorConverter.prototype.colorToRgb = function(color) {
       if ((color.r != null) && (color.g != null) && (color.b != null)) {
         return color;
       }
@@ -125,8 +125,10 @@
       };
     };
 
-    return colorConverter;
+    return ColorConverter;
 
   })();
+
+  window.ColorConverter = ColorConverter;
 
 }).call(this);
