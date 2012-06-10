@@ -23,8 +23,7 @@ getEscapeTimes = function(width, height, box, maxIterations) {
       var imaginary, real;
       real = interpolate(column, box.left, box.right, 0, width);
       imaginary = interpolate(row, box.top, box.bottom, 0, height);
-      rowTimes.push(getEscapeTimeAtPoint(real, imaginary, maxIterations));
-      return 0;
+      return rowTimes.push(getEscapeTimeAtPoint(real, imaginary, maxIterations));
     };
     for (column = _j = 0; 0 <= width ? _j <= width : _j >= width; column = 0 <= width ? ++_j : --_j) {
       _fn1(column);
@@ -34,8 +33,7 @@ getEscapeTimes = function(width, height, box, maxIterations) {
       message: "progress",
       value: 100 * (row / height)
     });
-    self.postMessage(message);
-    return 0;
+    return self.postMessage(message);
   };
   for (row = _i = 0; 0 <= height ? _i <= height : _i >= height; row = 0 <= height ? ++_i : --_i) {
     _fn(row);
