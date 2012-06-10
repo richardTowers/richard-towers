@@ -1,8 +1,12 @@
 class Mandelbrot
   
   #Constructor
-  constructor: ->
+  constructor: (colorConverter)->
     self = this
+    
+    throw "Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:})." unless colorConverter? and colorConverter.colorToRgb?
+    @_colorConverter = colorConverter
+    
     @box = 
       top: 1
       left: -2
@@ -13,8 +17,8 @@ class Mandelbrot
     
     if window.Modernizr.webworkers and window.JSON
       # Use a web worker to do the magic
-      @worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js')
-      @drawSet = (context, maxIterations) -> drawSetWithWorker @worker, context, self.box, maxIterations
+      @worker = new window.Worker '../../js/mylibs/mandelbrot-worker.js'
+      @drawSet = (context, maxIterations) -> drawSetWithWorker @worker, context, self.box, maxIterations, @_colorConverter
     else
       # Do the magic ourself :-(
       @drawSet = @drawSetInMainThread
@@ -50,7 +54,7 @@ class Mandelbrot
       return 0
     
     
-  drawSetWithWorker = (worker, context, box, maxIterations) ->
+  drawSetWithWorker = (worker, context, box, maxIterations, colorConverter) ->
     width = context.canvas.width
     height = context.canvas.height
     message = JSON.stringify
@@ -71,7 +75,7 @@ class Mandelbrot
           when "progress"
             $('#mandelbrotProgress .bar').css 'width', data.value+'%'
           when "success"
-            drawEscapeTimes context, data.value, maxIterations
+            drawEscapeTimes context, data.value, maxIterations, colorConverter
             $('#mandelbrotProgress').removeClass 'progress-striped'
             $('#mandelbrotProgress').removeClass 'active'
             $('#mandelbrotProgress').addClass 'progress-success'
@@ -84,11 +88,12 @@ class Mandelbrot
   drawSetInMainThread = (context) ->
     return 0
       
-  drawEscapeTimes = (context, escapeTimes, maxIterations) ->
+  drawEscapeTimes = (context, escapeTimes, maxIterations, colorConverter) ->
     colorScheme = generateColorScheme (i) ->
-      r: i
-      g: i
-      b: i
+      colorConverter.colorToRgb
+        h: 360*i/255
+        s: 1
+        v: 1
     
     settings =
       isBinary: false

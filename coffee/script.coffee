@@ -30,6 +30,6 @@ $ ->
   window.prettyPrint()
   $('[rel=tooltip]').tooltip({placement:'right'})
   if $('#mandelbrot').length
-    mandelbrot = new window.Mandelbrot()
+    mandelbrot = new window.Mandelbrot(new window.ColorConverter())
     mandelbrot.run 'mandelbrot'
   return 0

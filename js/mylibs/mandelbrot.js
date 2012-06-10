@@ -5,9 +5,13 @@
   Mandelbrot = (function() {
     var drawEscapeTimes, drawSetInMainThread, drawSetWithWorker, generateColorScheme, getColor, setCanvasSize, setPixel;
 
-    function Mandelbrot() {
+    function Mandelbrot(colorConverter) {
       var self;
       self = this;
+      if (!((colorConverter != null) && (colorConverter.colorToRgb != null))) {
+        throw "Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:}).";
+      }
+      this._colorConverter = colorConverter;
       this.box = {
         top: 1,
         left: -2,
@@ -18,7 +22,7 @@
       if (window.Modernizr.webworkers && window.JSON) {
         this.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js');
         this.drawSet = function(context, maxIterations) {
-          return drawSetWithWorker(this.worker, context, self.box, maxIterations);
+          return drawSetWithWorker(this.worker, context, self.box, maxIterations, this._colorConverter);
         };
       } else {
         this.drawSet = this.drawSetInMainThread;
@@ -61,7 +65,7 @@
       });
     };
 
-    drawSetWithWorker = function(worker, context, box, maxIterations) {
+    drawSetWithWorker = function(worker, context, box, maxIterations, colorConverter) {
       var height, message, width;
       width = context.canvas.width;
       height = context.canvas.height;
@@ -84,7 +88,7 @@
           case "progress":
             return $('#mandelbrotProgress .bar').css('width', data.value + '%');
           case "success":
-            drawEscapeTimes(context, data.value, maxIterations);
+            drawEscapeTimes(context, data.value, maxIterations, colorConverter);
             $('#mandelbrotProgress').removeClass('progress-striped');
             $('#mandelbrotProgress').removeClass('active');
             return $('#mandelbrotProgress').addClass('progress-success');
@@ -99,14 +103,14 @@
       return 0;
     };
 
-    drawEscapeTimes = function(context, escapeTimes, maxIterations) {
+    drawEscapeTimes = function(context, escapeTimes, maxIterations, colorConverter) {
       var colorScheme, height, imageData, row, settings, width, _fn, _i;
       colorScheme = generateColorScheme(function(i) {
-        return {
-          r: i,
-          g: i,
-          b: i
-        };
+        return colorConverter.colorToRgb({
+          h: 360 * i / 255,
+          s: 1,
+          v: 1
+        });
       });
       settings = {
         isBinary: false,
