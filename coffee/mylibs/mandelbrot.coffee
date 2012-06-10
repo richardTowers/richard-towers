@@ -1,7 +1,7 @@
 class Mandelbrot
   
   #Constructor
-  constructor: () ->
+  constructor: ->
     self = this
     @box = 
       top: 1
@@ -14,7 +14,7 @@ class Mandelbrot
     if window.Modernizr.webworkers and window.JSON
       # Use a web worker to do the magic
       @worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js')
-      @drawSet = (context, maxIterations) -> drawSetWithWorker(@worker, context, self.box, maxIterations)
+      @drawSet = (context, maxIterations) -> drawSetWithWorker @worker, context, self.box, maxIterations
     else
       # Do the magic ourself :-(
       @drawSet = @drawSetInMainThread
@@ -22,29 +22,32 @@ class Mandelbrot
   run: (canvasId) ->
     self = this
     canvasElement = document.getElementById canvasId
-    if canvasElement?
-      context = canvasElement.getContext '2d'
-      setCanvasSize canvasId, context
-      @drawSet context, @maxIterations
+    throw 'Could not find canvas element ' + canvasId unless canvasElement?
+    
+    context = canvasElement.getContext '2d'
+    throw 'Could not build 2d canvas context in ' + canvasId unless context?
+    
+    setCanvasSize canvasId, context
+    @drawSet context, @maxIterations
+    
+    mi = $('#maxIterationsButton').click ->
+      self.maxIterations = $('#maxIterations').val()
+      if self.worker
+        self.worker.terminate()
+        self.worker = new window.Worker '../../js/mylibs/mandelbrot-worker.js'
+      $('#mandelbrotProgress').find('.bar').width '0%'
+      $('#mandelbrotProgress').addClass 'progress-striped'
+      $('#mandelbrotProgress').addClass 'active'
+      $('#mandelbrotProgress').removeClass 'progress-success'
+      self.drawSet context, self.maxIterations
+      return false
       
-      mi = $('#maxIterationsButton').click ->
-        self.maxIterations = $('#maxIterations').val()
-        if self.worker
-          self.worker.terminate()
-          self.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js')
-        $('#mandelbrotProgress').find('.bar').width('0%')
-        $('#mandelbrotProgress').addClass 'progress-striped'
-        $('#mandelbrotProgress').addClass 'active'
-        $('#mandelbrotProgress').removeClass 'progress-success'
-        self.drawSet context, self.maxIterations
-        return false
-        
-      
-      # Attach resize code to resive event
-      $(window).resize ->
-        clearTimeout resizeTimer
-        resizeTimer = setTimeout (() -> setCanvasSize canvasId, context), 100 
-        return 0
+    
+    # Attach resize code to resive event
+    $(window).resize ->
+      clearTimeout resizeTimer
+      resizeTimer = setTimeout (() -> setCanvasSize canvasId, context), 100 
+      return 0
     
     
   drawSetWithWorker = (worker, context, box, maxIterations) ->
@@ -95,6 +98,7 @@ class Mandelbrot
         g: 0
         b: 0
       colorScheme: colorScheme
+    
     width = context.canvas.width
     height = context.canvas.height
     imageData = context.createImageData width, height
