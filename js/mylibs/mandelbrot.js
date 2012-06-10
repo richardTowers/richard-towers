@@ -128,9 +128,9 @@
         };
       } else {
         return {
-          r: 255,
-          g: 255,
-          b: 255
+          r: 255 - 255 * (escapeTime / maxIterations),
+          g: 255 * (escapeTime / maxIterations),
+          b: 255 * (escapeTime / maxIterations)
         };
       }
     };

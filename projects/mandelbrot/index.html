@@ -73,7 +73,7 @@
       
       <div class="row no-webworkers-message">
         <div class="span8 offset2 alert alert-info">
-          <a class="close" data-dismiss="alert" href="#">×</a>
+          <a data-dismiss="alert" href="#">×</a>
           <h4>Hmmm...</h4>
           <p>Your browser doesn't support <a href="http://en.wikipedia.org/wiki/Web_worker">webworkers</a>.
           This project will still work, but it's going to be pretty slow and might cause your browser to freeze temporarily.
@@ -84,22 +84,34 @@
       
       <div class="row bitsAndBobs">
         <div class="span3">
-          <div class="well">
-            <h2>Settings</h2>
-            <label for="maxiterations"><span class="toolBase" rel="tooltip" title="Large numbers will take a long time">Maximum Iterations</span></label>
-            <input type="number" value="30" id="maxIterations" min="0" max="100000" step="10">
-            <h4>Coloring Type</h4>
-            <label for="Binary">Binary<input type="radio" name="coloringType" value="Binary" class="pull-right" checked></label>
-            <label for="EscapeTime">Escape Time<input type="radio" name="coloringType" value="EscapeTime" class="pull-right"></label>
-            <label for="coloringType">Smooth Escape Time<input type="radio" name="coloringType" value="SmoothEscape" class="pull-right"></label>
-            <button id="maxIterationsButton" class="btn">Calculate &raquo;</button>
+          <div class="visible-phone clearfix">
+            <a class="pull-right" data-toggle="collapse" data-target="#settingsGroup" href="#">Show/Hide Settings</a>
+          </div>
+          <div id="settingsGroup" class="collapse in">
+            <div class="well">
+              <h2>Depth</h2>
+                <label for="maxIterations"><a class="toolBase" rel="tooltip" title="Large numbers will take a long time">Maximum Iterations</a></label>
+                <input type="number" value="30" id="maxIterations" min="0" max="100000" step="10">
+                <button id="maxIterationsButton" class="btn">Recalculate &raquo;</button>
+            </div>
+            <div class="well">
+              <h2>Colouring</h2>
+              <h3>Algorithm</h3>
+              <label>Escape Time<input type="radio" name="coloringAlgorithm" value="EscapeTime" class="pull-right" checked></label>
+              <label>Smooth<input type="radio" name="coloringAlgorithm" value="Smooth" class="pull-right"></label>
+              <h3>Scheme</h3>
+              <label>Monochrome<input type="radio" name="coloringScheme" value="Monochrome" class="pull-right" checked></label>
+              <label>Hue<input type="radio" name="coloringScheme" value="Hue" class="pull-right"></label>
+              <label>Loop colors every:<input type="number" name="loop" placeholder="Iterations"></label>
+              <button id="redrawButton" class="btn">Redraw &raquo;</button>
+            </div>
           </div>
         </div>
         <div class="span8">
           <div id="mandelbrotProgress" class="progress instant-transition progress-striped active">
             <div class="bar"></div>
           </div>
-          <canvas id="mandelbrot">
+          <canvas id="mandelbrot"></canvas>
         </div>
       </div>
       

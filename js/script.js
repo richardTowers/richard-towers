@@ -36,7 +36,7 @@ For more information, please refer to http://unlicense.org/
   $(function() {
     var mandelbrot;
     window.prettyPrint();
-    $('.toolBase').tooltip();
+    $('[rel=tooltip]').tooltip();
     if ($('#mandelbrot').length) {
       mandelbrot = new window.Mandelbrot();
       mandelbrot.run('mandelbrot');

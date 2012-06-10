@@ -81,7 +81,6 @@ class Mandelbrot
   drawSetInMainThread = (context) ->
     return 0
       
-  # TODO: This is time consuming. We shhould do this in the worker and send back imageData.data
   drawEscapeTimes = (context, escapeTimes, maxIterations) ->
     width = context.canvas.width
     height = context.canvas.height
@@ -102,9 +101,9 @@ class Mandelbrot
       g: 0
       b: 0
     else
-      r: 255
-      g: 255
-      b: 255
+      r: 255-255*(escapeTime/maxIterations)
+      g: 255*(escapeTime/maxIterations)
+      b: 255*(escapeTime/maxIterations)
   
   setPixel = (imageData, x, y, r, g, b, a) ->
     index = (x + y * imageData.width) * 4
