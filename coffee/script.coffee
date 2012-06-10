@@ -28,7 +28,7 @@ $ = jQuery
 
 $ ->
   window.prettyPrint()
-  $('[rel=tooltip]').tooltip()
+  $('[rel=tooltip]').tooltip({placement:'right'})
   if $('#mandelbrot').length
     mandelbrot = new window.Mandelbrot()
     mandelbrot.run 'mandelbrot'
