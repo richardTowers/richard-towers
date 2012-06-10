@@ -81,7 +81,7 @@ class Mandelbrot
   drawSetInMainThread = (context) ->
     return 0
       
-      
+  # TODO: This is time consuming. We shhould do this in the worker and send back imageData.data
   drawEscapeTimes = (context, escapeTimes, maxIterations) ->
     width = context.canvas.width
     height = context.canvas.height
