@@ -33,7 +33,7 @@ getEscapeTimeAtPoint = (real, imaginary, maxIteration) ->
   y = 0
   iteration = 0
 
-  while (x*x + y*y < 2*2  &&  iteration < maxIteration)
+  while x*x + y*y < 2*2  and  iteration < maxIteration
     xtemp = x*x - y*y + real
     y = 2*x*y + imaginary
     x = xtemp
