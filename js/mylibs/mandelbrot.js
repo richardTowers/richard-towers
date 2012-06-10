@@ -29,32 +29,36 @@
       var canvasElement, context, mi, self;
       self = this;
       canvasElement = document.getElementById(canvasId);
-      if (canvasElement != null) {
-        context = canvasElement.getContext('2d');
-        setCanvasSize(canvasId, context);
-        this.drawSet(context, this.maxIterations);
-        mi = $('#maxIterationsButton').click(function() {
-          self.maxIterations = $('#maxIterations').val();
-          if (self.worker) {
-            self.worker.terminate();
-            self.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js');
-          }
-          $('#mandelbrotProgress').find('.bar').width('0%');
-          $('#mandelbrotProgress').addClass('progress-striped');
-          $('#mandelbrotProgress').addClass('active');
-          $('#mandelbrotProgress').removeClass('progress-success');
-          self.drawSet(context, self.maxIterations);
-          return false;
-        });
-        return $(window).resize(function() {
-          var resizeTimer;
-          clearTimeout(resizeTimer);
-          resizeTimer = setTimeout((function() {
-            return setCanvasSize(canvasId, context);
-          }), 100);
-          return 0;
-        });
+      if (canvasElement == null) {
+        throw 'Could not find canvas element ' + canvasId;
       }
+      context = canvasElement.getContext('2d');
+      if (context == null) {
+        throw 'Could not build 2d canvas context in ' + canvasId;
+      }
+      setCanvasSize(canvasId, context);
+      this.drawSet(context, this.maxIterations);
+      mi = $('#maxIterationsButton').click(function() {
+        self.maxIterations = $('#maxIterations').val();
+        if (self.worker) {
+          self.worker.terminate();
+          self.worker = new window.Worker('../../js/mylibs/mandelbrot-worker.js');
+        }
+        $('#mandelbrotProgress').find('.bar').width('0%');
+        $('#mandelbrotProgress').addClass('progress-striped');
+        $('#mandelbrotProgress').addClass('active');
+        $('#mandelbrotProgress').removeClass('progress-success');
+        self.drawSet(context, self.maxIterations);
+        return false;
+      });
+      return $(window).resize(function() {
+        var resizeTimer;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout((function() {
+          return setCanvasSize(canvasId, context);
+        }), 100);
+        return 0;
+      });
     };
 
     drawSetWithWorker = function(worker, context, box, maxIterations) {
