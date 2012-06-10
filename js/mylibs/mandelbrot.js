@@ -3,7 +3,7 @@
   var Mandelbrot;
 
   Mandelbrot = (function() {
-    var drawEscapeTimes, drawSetInMainThread, drawSetWithWorker, getColor, setCanvasSize, setPixel;
+    var drawEscapeTimes, drawSetInMainThread, drawSetWithWorker, generateColorScheme, getColor, setCanvasSize, setPixel;
 
     function Mandelbrot() {
       var self;
@@ -96,7 +96,24 @@
     };
 
     drawEscapeTimes = function(context, escapeTimes, maxIterations) {
-      var height, imageData, row, width, _fn, _i;
+      var colorScheme, height, imageData, row, settings, width, _fn, _i;
+      colorScheme = generateColorScheme(function(i) {
+        return {
+          r: i,
+          g: i,
+          b: i
+        };
+      });
+      settings = {
+        isBinary: false,
+        maxIterations: maxIterations,
+        insideSetColor: {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        colorScheme: colorScheme
+      };
       width = context.canvas.width;
       height = context.canvas.height;
       imageData = context.createImageData(width, height);
@@ -104,7 +121,7 @@
         var column, _fn1, _j;
         _fn1 = function(column) {
           var color;
-          color = getColor(escapeTimes[row][column], maxIterations);
+          color = getColor(escapeTimes[row][column], settings);
           setPixel(imageData, column, row, color.r, color.g, color.b, 255);
           return 0;
         };
@@ -119,20 +136,36 @@
       return context.putImageData(imageData, 0, 0);
     };
 
-    getColor = function(escapeTime, maxIterations) {
+    getColor = function(escapeTime, settings) {
+      var color, maxIterations;
+      maxIterations = settings.maxIterations;
       if (escapeTime >= maxIterations) {
         return {
-          r: 0,
-          g: 0,
-          b: 0
+          r: settings.insideSetColor.r,
+          g: settings.insideSetColor.g,
+          b: settings.insideSetColor.b
         };
       } else {
+        if (settings.isBinary) {
+          color = settings.colorScheme[0];
+        } else {
+          color = settings.colorScheme[Math.floor(255 * (escapeTime / maxIterations))];
+        }
         return {
-          r: 255 - 255 * (escapeTime / maxIterations),
-          g: 255 * (escapeTime / maxIterations),
-          b: 255 * (escapeTime / maxIterations)
+          r: color.r,
+          g: color.g,
+          b: color.b
         };
       }
+    };
+
+    generateColorScheme = function(func) {
+      var i, _i, _results;
+      _results = [];
+      for (i = _i = 0; _i <= 255; i = ++_i) {
+        _results.push(func(i));
+      }
+      return _results;
     };
 
     setPixel = function(imageData, x, y, r, g, b, a) {

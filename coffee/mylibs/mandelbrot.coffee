@@ -82,6 +82,19 @@ class Mandelbrot
     return 0
       
   drawEscapeTimes = (context, escapeTimes, maxIterations) ->
+    colorScheme = generateColorScheme (i) ->
+      r: i
+      g: i
+      b: i
+    
+    settings =
+      isBinary: false
+      maxIterations: maxIterations
+      insideSetColor:
+        r: 0
+        g: 0
+        b: 0
+      colorScheme: colorScheme
     width = context.canvas.width
     height = context.canvas.height
     imageData = context.createImageData width, height
@@ -89,21 +102,30 @@ class Mandelbrot
       do (row) ->
         for column in [0..width]
           do(column) ->
-            color = getColor escapeTimes[row][column], maxIterations
+            color = getColor escapeTimes[row][column], settings
             setPixel imageData, column, row, color.r, color.g, color.b, 255
             return 0
         return 0
     context.putImageData imageData, 0, 0
   
-  getColor = (escapeTime, maxIterations) ->
+  getColor = (escapeTime, settings) ->
+    maxIterations = settings.maxIterations
     if escapeTime >= maxIterations
-      r: 0
-      g: 0
-      b: 0
+      r: settings.insideSetColor.r
+      g: settings.insideSetColor.g
+      b: settings.insideSetColor.b
     else
-      r: 255-255*(escapeTime/maxIterations)
-      g: 255*(escapeTime/maxIterations)
-      b: 255*(escapeTime/maxIterations)
+      if settings.isBinary
+        color = settings.colorScheme[0] 
+      else
+        color = settings.colorScheme[Math.floor 255*(escapeTime/maxIterations)]
+      r: color.r
+      g: color.g
+      b: color.b
+      
+  generateColorScheme = (func) ->
+    func i for i in [0..255]
+        
   
   setPixel = (imageData, x, y, r, g, b, a) ->
     index = (x + y * imageData.width) * 4
