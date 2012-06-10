@@ -88,14 +88,14 @@
             <a class="pull-right" data-toggle="collapse" data-target="#settingsGroup" href="#">Show/Hide Settings</a>
           </div>
           <div id="settingsGroup" class="collapse in">
-            <div class="well">
+            <div id="depthSettings" class="well">
               <h2>Depth</h2>
                 <label for="maxIterations">Maximum Iterations</label>
                 <input type="number" value="30" id="maxIterations" min="0" max="100000" step="10"
                 rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
                 <button id="maxIterationsButton" class="btn">Recalculate &raquo;</button>
             </div>
-            <div class="well">
+            <div id="colorSettings" class="well">
               <h2>Colouring</h2>
               <h3>Algorithm</h3>
               <label>None<input type="radio" name="coloringAlgorithm" value="None" class="pull-right"></label>
@@ -104,7 +104,7 @@
               <h3>Scheme</h3>
               <label>Monochrome<input type="radio" name="coloringScheme" value="Monochrome" class="pull-right" checked></label>
               <label>Hue<input type="radio" name="coloringScheme" value="Hue" class="pull-right"></label>
-              <label>Loop colors every:<input type="number" name="loop" placeholder="Iterations"></label>
+              <label>Loop colours every:<input type="number" name="loop" placeholder="Iterations"></label>
               <button id="redrawButton" class="btn">Redraw &raquo;</button>
             </div>
           </div>
