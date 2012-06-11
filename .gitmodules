@@ -1,0 +1,3 @@
+[submodule "QUnit-CLI"]
+	path = QUnit-CLI
+	url = git://github.com/benjaminplee/QUnit-CLI.git
