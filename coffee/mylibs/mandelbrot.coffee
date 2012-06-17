@@ -1,3 +1,6 @@
+# @licence This code is [unlicenced](http://unlicense.org/UNLICENSE).
+
+# A controller for the mandelbrot demo.
 class Mandelbrot
   
   #Constructor

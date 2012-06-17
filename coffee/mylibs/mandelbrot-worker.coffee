@@ -1,12 +1,27 @@
-this.addEventListener 'message',
-  ((e) ->
+# @licence This code is [unlicenced](http://unlicense.org/UNLICENSE).
+
+# A web worker to evaluate the mandelbrot function for a set of pixels.
+
+# ### Messages
+
+# Listen for messages from parent process
+listener = (e) ->
+    # Unpack data from call
     data = JSON.parse e.data
+    # Calculate escape times
     escapeTimes = getEscapeTimes data.width, data.height, data.box, data.maxIterations
+    # Build a message with the results
     message = JSON.stringify
       message:"success"
       value:escapeTimes
-    this.postMessage message),
-  false
+    # Send the success message back to the parent
+    this.postMessage message
+
+# Add the listener to the message event, do not `useCapture`
+this.addEventListener 'message', listener, false
+
+# ### Functions
+# *Todo*: Move these into a separate class with a parameterless contructor
 
 getEscapeTimes = (width, height, box, maxIterations) ->
   self = this
