@@ -1,15 +1,20 @@
-###
- *  Very small helper library to deal with conversions between color systems
- *  Currently supports:
- *    HSV and RGB only
- *  Expected formats:
- *    hsv -> {h: hue, s: saturation, v: value}
- *    rgb -> {r: red, g: green, b: blue}
- *  Expected ranges:
- *    0 <= hue < 360 (values outside this range will wrap)
- *    0 <= saturation, value <= 1 (values will be cropped to fit)
- *    0 <= red, green, blue <= 255 (values will be cropped to fit)
-###
+# Very small helper library to deal with conversions between color systems.
+#
+# Currently supports:
+#
+#   * HSV and RGB only
+#
+# Expected formats:
+#
+#   * hsv -> {h: hue, s: saturation, v: value}
+#   * rgb -> {r: red, g: green, b: blue}
+#
+# Expected ranges:
+#
+#   * 0 <= hue < 360 (values outside this range will wrap)
+#   * 0 <= saturation, value <= 1 (values will be cropped to fit)
+#   * 0 <= red, green, blue <= 255 (values will be cropped to fit)
+
 class ColorConverter
   # Wrappers for conveinence
   colorToHsv: (color) ->

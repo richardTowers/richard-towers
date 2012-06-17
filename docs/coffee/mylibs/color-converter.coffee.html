@@ -1,0 +1,96 @@
+<!DOCTYPE html><html><head><title>color-converter.coffee</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../../index.html" class="source"><span class="file_name">README</span></a><a href="../../coffee/mylibs/color-converter.coffee.html" class="source selected"><span class="base_path">coffee / mylibs / </span><span class="file_name">color-converter.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-worker.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-worker.coffee</span></a><a href="../../coffee/mylibs/mandelbrot.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot.coffee</span></a><a href="../../coffee/script.coffee.html" class="source "><span class="base_path">coffee / </span><span class="file_name">script.coffee</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>color-converter.coffee</h1><div class="filepath">coffee/mylibs/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div><p>Very small helper library to deal with conversions between color systems.</p>
+
+<p>Currently supports:</p>
+
+<ul>
+<li>HSV and RGB only</li>
+</ul>
+
+<p>Expected formats:</p>
+
+<ul>
+<li>hsv -> {h: hue, s: saturation, v: value}</li>
+<li>rgb -> {r: red, g: green, b: blue}</li>
+</ul>
+
+<p>Expected ranges:</p>
+
+<ul>
+<li>0 &lt;= hue &lt; 360 (values outside this range will wrap)</li>
+<li>0 &lt;= saturation, value &lt;= 1 (values will be cropped to fit)</li>
+<li>0 &lt;= red, green, blue &lt;= 255 (values will be cropped to fit)</li>
+</ul>
+</td><td class="code"><div class="highlight"><pre><span class="k">class</span> <span class="nx">ColorConverter</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><p>Wrappers for conveinence</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">colorToHsv: </span><span class="nf">(color) -&gt;</span>
+    <span class="k">if</span> <span class="nx">color</span><span class="p">.</span><span class="nx">h</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">s</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">v</span><span class="o">?</span> <span class="k">then</span> <span class="k">return</span> <span class="nx">color</span>
+    <span class="k">if</span> <span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="o">?</span> <span class="k">then</span> <span class="k">return</span> <span class="nx">rgbToHsv</span> <span class="nx">color</span>
+    <span class="k">else</span> <span class="k">throw</span> <span class="nx">color</span> <span class="o">+</span> <span class="s">&quot; is not a supported color.&quot;</span>
+    
+  <span class="nv">colorToRgb: </span><span class="nf">(color) -&gt;</span>
+    <span class="k">if</span> <span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="o">?</span> <span class="k">then</span> <span class="k">return</span> <span class="nx">color</span>
+    <span class="k">if</span> <span class="nx">color</span><span class="p">.</span><span class="nx">h</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">s</span><span class="o">?</span> <span class="o">and</span> <span class="nx">color</span><span class="p">.</span><span class="nx">v</span><span class="o">?</span> <span class="k">then</span> <span class="k">return</span> <span class="nx">hsvToRgb</span> <span class="nx">color</span>
+    <span class="k">else</span> <span class="k">throw</span> <span class="nx">color</span> <span class="o">+</span> <span class="s">&quot; is not a supported color.&quot;</span>
+  </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>Converters:</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">rgbToHsv = </span><span class="nf">(color) -&gt;</span>
+    <span class="nv">red = </span><span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="o">/</span><span class="mi">255</span>
+    <span class="nv">green = </span><span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="o">/</span><span class="mi">255</span>
+    <span class="nv">blue = </span><span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="o">/</span><span class="mi">255</span>
+    
+    <span class="nv">max = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span> <span class="nx">red</span><span class="p">,</span> <span class="nx">green</span><span class="p">,</span> <span class="nx">blue</span>
+    <span class="nv">min = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span> <span class="nx">red</span><span class="p">,</span> <span class="nx">green</span><span class="p">,</span> <span class="nx">blue</span>
+
+    <span class="nv">range = </span><span class="nx">max</span> <span class="o">-</span> <span class="nx">min</span><span class="p">;</span>
+    <span class="nv">sat = </span><span class="k">if</span> <span class="nx">max</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span> <span class="mi">0</span> <span class="k">else</span> <span class="nx">range</span> <span class="o">/</span> <span class="nx">max</span>
+
+    <span class="k">switch</span> <span class="nx">max</span>
+      <span class="k">when</span> <span class="nx">min</span> <span class="k">then</span> <span class="nv">hue = </span><span class="mi">0</span> <span class="c1"># achromatic</span>
+      <span class="k">when</span> <span class="nx">red</span> <span class="k">then</span> <span class="nv">hue = </span><span class="p">(</span><span class="nx">green</span> <span class="o">-</span> <span class="nx">blue</span><span class="p">)</span> <span class="o">/</span> <span class="nx">range</span> <span class="o">+</span> <span class="p">(</span><span class="nx">green</span> <span class="o">&lt;</span> <span class="nx">blue</span> <span class="o">?</span> <span class="mi">6</span> <span class="o">:</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="k">when</span> <span class="nx">green</span> <span class="k">then</span> <span class="nv">hue = </span><span class="p">(</span><span class="nx">blue</span> <span class="o">-</span> <span class="nx">red</span><span class="p">)</span> <span class="o">/</span> <span class="nx">range</span> <span class="o">+</span> <span class="mi">2</span>
+      <span class="k">when</span> <span class="nx">blue</span> <span class="k">then</span> <span class="nv">hue = </span><span class="p">(</span><span class="nx">red</span> <span class="o">-</span> <span class="nx">green</span><span class="p">)</span> <span class="o">/</span> <span class="nx">range</span> <span class="o">+</span> <span class="mi">4</span>
+
+    <span class="nx">hue</span> <span class="o">*=</span> <span class="mi">60</span>
+    
+    <span class="nx">hsv</span> <span class="nx">hue</span><span class="p">,</span> <span class="nx">sat</span><span class="p">,</span> <span class="nx">max</span>
+    
+  <span class="nv">hsvToRgb = </span><span class="nf">(color) -&gt;</span>
+    <span class="nv">hue = </span><span class="nx">color</span><span class="p">.</span><span class="nx">h</span>
+    <span class="nv">sat = </span><span class="nx">color</span><span class="p">.</span><span class="nx">s</span>
+    <span class="nv">val = </span><span class="nx">color</span><span class="p">.</span><span class="nx">v</span>
+    </pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Rotate hue if necessary:</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="k">if</span> <span class="nx">hue</span> <span class="o">&gt;=</span> <span class="mi">360</span> <span class="k">then</span> <span class="nv">hue = </span><span class="nx">hue</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">hue</span><span class="o">/</span><span class="mi">360</span><span class="p">)</span><span class="o">*</span><span class="mi">360</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">hue</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">then</span> <span class="nv">hue = </span><span class="nx">hue</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">hue</span><span class="o">/</span><span class="mi">360</span><span class="p">))</span><span class="o">*</span><span class="mi">360</span>
+    </pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Crop saturation and value:</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">sat = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">sat</span><span class="p">)</span>
+    <span class="nv">val = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+    </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Do the calculation:</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">chroma = </span><span class="nx">val</span> <span class="o">*</span> <span class="nx">sat</span>
+    <span class="nv">hueSwitch = </span><span class="nx">hue</span><span class="o">/</span><span class="mi">60</span>
+    <span class="nv">x = </span><span class="nx">chroma</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">hueSwitch</span><span class="o">%</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="nx">sat</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nx">hueSwitch</span> <span class="o">and</span> <span class="nx">hueSwitch</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="nx">chroma</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="mi">1</span><span class="o">&lt;=</span> <span class="nx">hueSwitch</span> <span class="o">and</span> <span class="nx">hueSwitch</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">chroma</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="mi">2</span><span class="o">&lt;=</span> <span class="nx">hueSwitch</span> <span class="o">and</span> <span class="nx">hueSwitch</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">chroma</span><span class="p">,</span> <span class="nx">x</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="mi">3</span><span class="o">&lt;=</span> <span class="nx">hueSwitch</span> <span class="o">and</span> <span class="nx">hueSwitch</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">chroma</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="mi">4</span><span class="o">&lt;=</span> <span class="nx">hueSwitch</span> <span class="o">and</span> <span class="nx">hueSwitch</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="nx">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">chroma</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="mi">4</span><span class="o">&lt;=</span> <span class="nx">hueSwitch</span> <span class="o">and</span> <span class="nx">hueSwitch</span> <span class="o">&lt;=</span> <span class="mi">6</span> <span class="k">then</span> <span class="nv">color = </span><span class="nx">rgb</span> <span class="nx">chroma</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span>
+
+    <span class="nv">m = </span><span class="nx">val</span> <span class="o">-</span> <span class="nx">chroma</span>
+    
+    <span class="nv">color.r = </span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="nx">color</span><span class="p">.</span><span class="nx">r</span> <span class="o">+</span> <span class="nx">m</span><span class="p">)</span>
+    <span class="nv">color.g = </span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="nx">color</span><span class="p">.</span><span class="nx">g</span> <span class="o">+</span> <span class="nx">m</span><span class="p">)</span>
+    <span class="nv">color.b = </span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="nx">color</span><span class="p">.</span><span class="nx">b</span> <span class="o">+</span> <span class="nx">m</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">color</span>
+  </pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Utilities</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">rgb = </span><span class="nf">(red, green, blue) -&gt;</span>
+    <span class="nv">r: </span><span class="nx">red</span>
+    <span class="nv">g: </span><span class="nx">green</span>
+    <span class="nv">b: </span><span class="nx">blue</span>
+  <span class="nv">hsv = </span><span class="nf">(hue, sat, val) -&gt;</span>
+    <span class="nv">h: </span><span class="nx">hue</span>
+    <span class="nv">s: </span><span class="nx">sat</span>
+    <span class="nv">v: </span><span class="nx">val</span>
+    
+<span class="nb">window</span><span class="p">.</span><span class="nv">ColorConverter = </span><span class="nx">ColorConverter</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Sun Jun 17 2012 18:56:42 GMT+0100 (BST)  </div></div></body></html>

@@ -1,35 +1,24 @@
-###*@license
-This is free and unencumbered software released into the public domain.
+# @licence This code is [unlicenced](http://unlicense.org/UNLICENSE).
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+# **script** contains just the calls necessary to set things up.
 
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-For more information, please refer to http://unlicense.org/
-###
+# Just in case one of the other scripts we've included has been naughty
 $ = jQuery
 
+# On the DOM ready event
 $ ->
+  # **Todo**: Once using [require.js](http://requirejs.org/) most of these should only happen on pages that require them.
+  
+  # Set up prettyprint for any source that might be on the page.
   window.prettyPrint()
+  # Set up [bootstrap tooltips](http://twitter.github.com/bootstrap/javascript.html#tooltips).
   $('[rel=tooltip]').tooltip({placement:'right'})
+  
+  # **Todo**: Should *definitely* do this using [require](http://requirejs.org/).
+  # Mandelbrot set will be drawn in the `#mandelbrot` canvas if there is one.
   if $('#mandelbrot').length
-    mandelbrot = new window.Mandelbrot(new window.ColorConverter())
+    # Color converter deals with moving between RGB and HSV.
+    colorConverter = new window.ColorConverter()
+    # Mandelbrot will do all our calculation and drawing
+    mandelbrot = new window.Mandelbrot(colorConverter)
     mandelbrot.run 'mandelbrot'
-  return 0
