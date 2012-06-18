@@ -48,15 +48,16 @@ interpolate = function(x, y0, y1, x0, x1) {
 };
 
 getEscapeTimeAtPoint = function(real, imaginary, maxIteration) {
-  var iteration, x, xtemp, y;
-  x = 0;
-  y = 0;
-  iteration = 0;
-  while (x * x + y * y < 2 * 2 && iteration < maxIteration) {
-    xtemp = x * x - y * y + real;
-    y = 2 * x * y + imaginary;
-    x = xtemp;
-    iteration = iteration + 1;
+  var iteration, x, xtemp, y, _i, _ref;
+  _ref = [0, 0], x = _ref[0], y = _ref[1];
+  for (iteration = _i = 0; 0 <= maxIteration ? _i <= maxIteration : _i >= maxIteration; iteration = 0 <= maxIteration ? ++_i : --_i) {
+    if (x * x + y * y < 2 * 2) {
+      xtemp = x * x - y * y + real;
+      y = 2 * x * y + imaginary;
+      x = xtemp;
+    } else {
+      return iteration;
+    }
   }
   return iteration;
 };

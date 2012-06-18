@@ -44,14 +44,12 @@ getEscapeTimes = (width, height, box, maxIterations) ->
 interpolate = (x, y0, y1, x0, x1) -> y0 + (x - x0)*((y1 - y0)/(x1-x0))
 
 getEscapeTimeAtPoint = (real, imaginary, maxIteration) ->
-  x = 0
-  y = 0
-  iteration = 0
-
-  while x*x + y*y < 2*2  and  iteration < maxIteration
-    xtemp = x*x - y*y + real
-    y = 2*x*y + imaginary
-    x = xtemp
-    iteration = iteration + 1
-
+  [x, y] = [0, 0]
+  for iteration in [0..maxIteration]
+    if x*x + y*y < 2*2
+      xtemp = x*x - y*y + real
+      y = 2*x*y + imaginary
+      x = xtemp
+    else
+      return iteration
   return iteration
