@@ -3,12 +3,9 @@
 # A controller for the mandelbrot demo.
 class Mandelbrot
   
-  #Constructor
-  constructor: (colorConverter)->
-    self = this
-    
-    throw "Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:})." unless colorConverter? and colorConverter.colorToRgb?
-    @_colorConverter = colorConverter
+  # ##Constructor
+  constructor: (@colorConverter)->
+    throw "Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:})." unless @colorConverter? and @colorConverter.colorToRgb?
     
     @box = 
       top: 1
@@ -21,13 +18,12 @@ class Mandelbrot
     if window.Modernizr.webworkers and window.JSON
       # Use a web worker to do the magic
       @worker = new window.Worker '../../js/mylibs/mandelbrot-worker.js'
-      @drawSet = (context, maxIterations) -> drawSetWithWorker @worker, context, self.box, maxIterations, @_colorConverter
+      @drawSet = (context, maxIterations) -> drawSetWithWorker @worker, context, @box, maxIterations, @colorConverter
     else
       # Do the magic ourself :-(
       @drawSet = @drawSetInMainThread
   
-  run: (canvasId) ->
-    self = this
+  run: (canvasId) =>
     canvasElement = document.getElementById canvasId
     throw 'Could not find canvas element ' + canvasId unless canvasElement?
     
@@ -37,16 +33,16 @@ class Mandelbrot
     setCanvasSize canvasId, context
     @drawSet context, @maxIterations
     
-    mi = $('#maxIterationsButton').click ->
-      self.maxIterations = $('#maxIterations').val()
-      if self.worker
-        self.worker.terminate()
-        self.worker = new window.Worker '../../js/mylibs/mandelbrot-worker.js'
+    mi = $('#maxIterationsButton').click =>
+      @maxIterations = $('#maxIterations').val()
+      if @worker?
+        @worker.terminate()
+        @worker = new window.Worker '../../js/mylibs/mandelbrot-worker.js'
       $('#mandelbrotProgress').find('.bar').width '0%'
       $('#mandelbrotProgress').addClass 'progress-striped'
       $('#mandelbrotProgress').addClass 'active'
       $('#mandelbrotProgress').removeClass 'progress-success'
-      self.drawSet context, self.maxIterations
+      @drawSet context, @maxIterations
       return false
       
     
@@ -57,7 +53,7 @@ class Mandelbrot
       return 0
     
     
-  drawSetWithWorker = (worker, context, box, maxIterations, colorConverter) ->
+  drawSetWithWorker = (worker, context, box, maxIterations, colorConverter) =>
     width = context.canvas.width
     height = context.canvas.height
     message = JSON.stringify
@@ -69,7 +65,7 @@ class Mandelbrot
         left:box.left
         bottom:box.bottom
         right:box.right
-      maxIterations:maxIterations
+      maxIterations: @maxIterations
       
     worker.addEventListener 'message',
       ((e) ->
