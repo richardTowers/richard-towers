@@ -75,32 +75,34 @@ class ColorConverter
     sat = color.s
     val = color.v
     
-    # Rotate the hue if necessary:
+    # Rotate the hue if necessary
     if hue >= 360 then hue = hue - Math.floor(hue/360)*360
     else if hue < 0 then hue = hue + (1+Math.floor(hue/360))*360
     
-    # Crop the saturation and value:
+    # Crop the saturation and value
     sat = Math.max 0, Math.min(1, sat)
     val = Math.max 0, Math.min(1, val)
     
-    # Do the calculation:
+    # `chroma` is a measure of the colourfulness
     chroma = val * sat
-    hueSwitch = hue/60
-    x = chroma*(1-Math.abs(hueSwitch%2-1))
+    # `x` is either `0` or `1 * chroma` depending on which part of the hue spectrum we're on
+    x = chroma*(1-Math.abs((hue/60)%2-1))
+    lightness = val - chroma
     
+    # If there's no saturation then this is some shade of grey
     if sat == 0 then color = rgb 0, 0, 0
-    else if 0 <= hueSwitch and hueSwitch < 1 then color = rgb chroma, x, 0
-    else if 1<= hueSwitch and hueSwitch < 2 then color = rgb x, chroma, 0
-    else if 2<= hueSwitch and hueSwitch < 3 then color = rgb 0, chroma, x
-    else if 3<= hueSwitch and hueSwitch < 4 then color = rgb 0, x, chroma
-    else if 4<= hueSwitch and hueSwitch < 5 then color = rgb x, 0, chroma
-    else if 4<= hueSwitch and hueSwitch <= 6 then color = rgb chroma, 0, x
-
-    m = val - chroma
+    # The proportions of red green and blue depend on which section of the hue spectrum we're in 
+    else if 0 <= hue and hue < 60 then color = rgb chroma, x, 0
+    else if 60 <= hue and hue < 120 then color = rgb x, chroma, 0
+    else if 120 <= hue and hue < 180 then color = rgb 0, chroma, x
+    else if 180 <= hue and hue < 240 then color = rgb 0, x, chroma
+    else if 240 <= hue and hue < 320 then color = rgb x, 0, chroma
+    else if 320 <= hue and hue < 360 then color = rgb chroma, 0, x
     
-    color.r = 255 * (color.r + m)
-    color.g = 255 * (color.g + m)
-    color.b = 255 * (color.b + m)
+    # Translate for lightness and scale to the correct range
+    color.r = 255 * (color.r + lightness)
+    color.g = 255 * (color.g + lightness)
+    color.b = 255 * (color.b + lightness)
     return color
   
   # ###Color constructors

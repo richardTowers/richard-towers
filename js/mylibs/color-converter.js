@@ -58,7 +58,7 @@
     };
 
     hsvToRgb = function(color) {
-      var chroma, hue, hueSwitch, m, sat, val, x;
+      var chroma, hue, lightness, sat, val, x;
       hue = color.h;
       sat = color.s;
       val = color.v;
@@ -70,27 +70,26 @@
       sat = Math.max(0, Math.min(1, sat));
       val = Math.max(0, Math.min(1, val));
       chroma = val * sat;
-      hueSwitch = hue / 60;
-      x = chroma * (1 - Math.abs(hueSwitch % 2 - 1));
+      x = chroma * (1 - Math.abs((hue / 60) % 2 - 1));
+      lightness = val - chroma;
       if (sat === 0) {
         color = rgb(0, 0, 0);
-      } else if (0 <= hueSwitch && hueSwitch < 1) {
+      } else if (0 <= hue && hue < 60) {
         color = rgb(chroma, x, 0);
-      } else if (1 <= hueSwitch && hueSwitch < 2) {
+      } else if (60 <= hue && hue < 120) {
         color = rgb(x, chroma, 0);
-      } else if (2 <= hueSwitch && hueSwitch < 3) {
+      } else if (120 <= hue && hue < 180) {
         color = rgb(0, chroma, x);
-      } else if (3 <= hueSwitch && hueSwitch < 4) {
+      } else if (180 <= hue && hue < 240) {
         color = rgb(0, x, chroma);
-      } else if (4 <= hueSwitch && hueSwitch < 5) {
+      } else if (240 <= hue && hue < 320) {
         color = rgb(x, 0, chroma);
-      } else if (4 <= hueSwitch && hueSwitch <= 6) {
+      } else if (320 <= hue && hue < 360) {
         color = rgb(chroma, 0, x);
       }
-      m = val - chroma;
-      color.r = 255 * (color.r + m);
-      color.g = 255 * (color.g + m);
-      color.b = 255 * (color.b + m);
+      color.r = 255 * (color.r + lightness);
+      color.g = 255 * (color.g + lightness);
+      color.b = 255 * (color.b + lightness);
       return color;
     };
 
