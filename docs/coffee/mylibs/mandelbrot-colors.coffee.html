@@ -31,7 +31,7 @@
 </td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><h3>drawEscapeTimes</h3>
 
 <p>Takes a canvas context and draws the escape times</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">drawEscapeTimesInContext = </span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">escapeTimes</span><span class="p">)</span> <span class="o">=&gt;</span>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">drawEscapeTimesInContext: </span><span class="p">(</span><span class="nx">escapeTimes</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span>
     <span class="nv">width = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
     <span class="nv">height = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
     <span class="nv">imageData = </span><span class="nx">context</span><span class="p">.</span><span class="nx">createImageData</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
@@ -39,7 +39,7 @@
       <span class="nx">do</span> <span class="p">(</span><span class="nx">row</span><span class="p">)</span> <span class="o">=&gt;</span>
         <span class="k">for</span> <span class="nx">column</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">width</span><span class="p">]</span>
           <span class="nx">do</span><span class="p">(</span><span class="nx">column</span><span class="p">)</span> <span class="o">=&gt;</span>
-            <span class="nv">color = </span><span class="nx">getColor</span> <span class="nx">escapeTimes</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">column</span><span class="p">]</span>
+            <span class="nv">color = </span><span class="nx">getColor</span> <span class="nx">escapeTimes</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">column</span><span class="p">],</span> <span class="nx">@settings</span>
             <span class="nx">setPixel</span> <span class="nx">imageData</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="p">,</span> <span class="mi">255</span>
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="mi">0</span>
@@ -54,19 +54,19 @@ This prevents us from having to execute a (potentially) expensive function for e
   </pre></div></td></tr><tr id="section-12"><td class="docs"><div class="pilwrap"><a href="#section-12" class="pilcrow">&#182;</a></div><h3>getColor</h3>
 
 <p>Get the color corresponding to this escape time</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">getColor = </span><span class="p">(</span><span class="nx">escapeTime</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="nv">maxIterations = </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">maxIterations</span>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">getColor = </span><span class="p">(</span><span class="nx">escapeTime</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nv">maxIterations = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">maxIterations</span>
     <span class="k">if</span> <span class="nx">escapeTime</span> <span class="o">&gt;=</span> <span class="nx">maxIterations</span>
-      <span class="nv">r: </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">r</span>
-      <span class="nv">g: </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">g</span>
-      <span class="nv">b: </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">b</span>
+      <span class="nv">r: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">r</span>
+      <span class="nv">g: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">g</span>
+      <span class="nv">b: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">b</span>
     <span class="k">else</span>
-      <span class="k">if</span> <span class="nx">@settings</span><span class="p">.</span><span class="nx">isBinary</span>
-        <span class="nv">color = </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+      <span class="k">if</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">isBinary</span>
+        <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
       <span class="k">else</span>
-        <span class="nv">loopEvery = </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">loopEvery</span>
-        <span class="nv">index = </span><span class="p">(</span><span class="nx">escapeTime</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">escapeTime</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">255</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span>
-        <span class="nv">color = </span><span class="nx">@settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
+        <span class="nv">loopEvery = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">loopEvery</span>
+        <span class="nv">index = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="p">(</span><span class="nx">escapeTime</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">escapeTime</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">255</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span>
+        <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
       <span class="k">return</span> <span class="nx">color</span>
   </pre></div></td></tr><tr id="section-13"><td class="docs"><div class="pilwrap"><a href="#section-13" class="pilcrow">&#182;</a></div><h3>setPixel</h3>
 
@@ -80,4 +80,4 @@ This prevents us from having to execute a (potentially) expensive function for e
 
 <span class="nb">window</span><span class="p">.</span><span class="nv">MandelbrotColors = </span><span class="nx">MandelbrotColors</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 15:19:38 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 16:47:38 GMT+0100 (BST)  </div></div></body></html>
