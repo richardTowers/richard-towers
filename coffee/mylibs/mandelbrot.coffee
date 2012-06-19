@@ -40,5 +40,9 @@ class Mandelbrot
     context.canvas.width = width
     context.canvas.height = width * 2/3.0
     return 0
-    
-window.Mandelbrot = Mandelbrot
+
+# I would be overkill to do this in an abstract factory
+core = new window.MandelbrotCore()
+colors = new window.MandelbrotColors()
+canvasElement = document.getElementById 'mandlebrot'
+mandelbrot = new Mandelbrot(canvasElement)

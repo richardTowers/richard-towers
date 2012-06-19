@@ -2,147 +2,38 @@
 </td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><p>A controller for the mandelbrot demo.</p>
 </td><td class="code"><div class="highlight"><pre><span class="k">class</span> <span class="nx">Mandelbrot</span>
   </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(@colorConverter)-&gt;</span>
-    <span class="k">throw</span> <span class="s">&quot;Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:}).&quot;</span> <span class="nx">unless</span> <span class="nx">@colorConverter</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span><span class="o">?</span>
-    
-    <span class="vi">@box = </span>
+</td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Set up dependencies and defaults</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(@mandelbrotCore, @mandelbrotColors, canvasElement) -&gt;</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Null check dependencies</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="k">throw</span> <span class="s">&quot;mandelbrotCore is required&quot;</span> <span class="nx">unless</span> <span class="nx">@mandelbrotCore</span><span class="o">?</span>
+    <span class="k">throw</span> <span class="s">&quot;mandelbrotColors is required&quot;</span> <span class="nx">unless</span> <span class="nx">@mandelbrotColors</span><span class="o">?</span>
+    </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Starting bounding box</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@box = </span>
       <span class="nv">top: </span><span class="mi">1</span>
       <span class="nv">left: </span><span class="o">-</span><span class="mi">2</span>
       <span class="nv">bottom: </span><span class="o">-</span><span class="mi">1</span>
       <span class="nv">right: </span><span class="mi">1</span>
     
-    <span class="vi">@maxIterations = </span><span class="mi">30</span>
-    
-    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Modernizr</span><span class="p">.</span><span class="nx">webworkers</span> <span class="o">and</span> <span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Use a web worker to do the magic</p>
+    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Modernizr</span><span class="p">.</span><span class="nx">webworkers</span> <span class="o">and</span> <span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span></pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Use a web worker to do the magic</p>
 </td><td class="code"><div class="highlight"><pre>      <span class="vi">@worker = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Worker</span> <span class="s">&#39;../../js/mylibs/mandelbrot-worker.js&#39;</span>
-      <span class="vi">@drawSet = </span><span class="nf">(context, maxIterations) -&gt;</span> <span class="nx">drawSetWithWorker</span> <span class="nx">@worker</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">@box</span><span class="p">,</span> <span class="nx">maxIterations</span><span class="p">,</span> <span class="nx">@colorConverter</span>
-    <span class="k">else</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Do the magic ourself :-(</p>
-</td><td class="code"><div class="highlight"><pre>      <span class="vi">@drawSet = </span><span class="nx">@drawSetInMainThread</span>
-  
-  <span class="nv">run: </span><span class="p">(</span><span class="nx">canvasId</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="nv">canvasElement = </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span> <span class="nx">canvasId</span>
-    <span class="k">throw</span> <span class="s">&#39;Could not find canvas element &#39;</span> <span class="o">+</span> <span class="nx">canvasId</span> <span class="nx">unless</span> <span class="nx">canvasElement</span><span class="o">?</span>
+    <span class="k">else</span></pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><p>Do the magic ourself :-(</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">context = </span><span class="nx">canvasElement</span><span class="p">.</span><span class="nx">getContext</span> <span class="s">&#39;2d&#39;</span>
+    <span class="k">throw</span> <span class="s">&#39;Could not build 2d canvas context in canvas&#39;</span> <span class="nx">unless</span> <span class="nx">context</span><span class="o">?</span>
     
-    <span class="nv">context = </span><span class="nx">canvasElement</span><span class="p">.</span><span class="nx">getContext</span> <span class="s">&#39;2d&#39;</span>
-    <span class="k">throw</span> <span class="s">&#39;Could not build 2d canvas context in &#39;</span> <span class="o">+</span> <span class="nx">canvasId</span> <span class="nx">unless</span> <span class="nx">context</span><span class="o">?</span>
-    
-    <span class="nx">setCanvasSize</span> <span class="nx">canvasId</span><span class="p">,</span> <span class="nx">context</span>
-    <span class="nx">@drawSet</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">@maxIterations</span>
-    
-    <span class="nv">mi = </span><span class="nx">$</span><span class="p">(</span><span class="s">&#39;#maxIterationsButton&#39;</span><span class="p">).</span><span class="nx">click</span> <span class="o">=&gt;</span>
-      <span class="vi">@maxIterations = </span><span class="nx">$</span><span class="p">(</span><span class="s">&#39;#maxIterations&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
-      <span class="k">if</span> <span class="nx">@worker</span><span class="o">?</span>
-        <span class="nx">@worker</span><span class="p">.</span><span class="nx">terminate</span><span class="p">()</span>
-        <span class="vi">@worker = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Worker</span> <span class="s">&#39;../../js/mylibs/mandelbrot-worker.js&#39;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s">&#39;.bar&#39;</span><span class="p">).</span><span class="nx">width</span> <span class="s">&#39;0%&#39;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">addClass</span> <span class="s">&#39;progress-striped&#39;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">addClass</span> <span class="s">&#39;active&#39;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">removeClass</span> <span class="s">&#39;progress-success&#39;</span>
-      <span class="nx">@drawSet</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">@maxIterations</span>
-      <span class="k">return</span> <span class="kc">false</span>
-      
-    </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Attach resize code to resive event</p>
+    <span class="nx">setCanvasSize</span> <span class="nx">canvasElement</span><span class="p">,</span> <span class="nx">context</span>
+    </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><p>Attach resize code to resive event</p>
 </td><td class="code"><div class="highlight"><pre>    <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span> <span class="o">-&gt;</span>
       <span class="nx">clearTimeout</span> <span class="nx">resizeTimer</span>
-      <span class="nv">resizeTimer = </span><span class="nx">setTimeout</span> <span class="p">(</span><span class="nf">() -&gt;</span> <span class="nx">setCanvasSize</span> <span class="nx">canvasId</span><span class="p">,</span> <span class="nx">context</span><span class="p">),</span> <span class="mi">100</span> 
+      <span class="nv">resizeTimer = </span><span class="nx">setTimeout</span> <span class="p">(</span><span class="nf">() -&gt;</span> <span class="nx">setCanvasSize</span> <span class="nx">canvasElement</span><span class="p">,</span> <span class="nx">context</span><span class="p">),</span> <span class="mi">100</span> 
       <span class="k">return</span> <span class="mi">0</span>
     
-    
-  <span class="nv">drawSetWithWorker = </span><span class="p">(</span><span class="nx">worker</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">box</span><span class="p">,</span> <span class="nx">maxIterations</span><span class="p">,</span> <span class="nx">colorConverter</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="nv">width = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
-    <span class="nv">height = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
-    <span class="nv">message = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span>
-      <span class="nv">message: </span><span class="s">&quot;run&quot;</span>
-      <span class="nx">width</span><span class="o">:</span><span class="nx">width</span>
-      <span class="nx">height</span><span class="o">:</span><span class="nx">height</span>
-      <span class="nv">box:</span>
-        <span class="nx">top</span><span class="o">:</span><span class="nx">box</span><span class="p">.</span><span class="nx">top</span>
-        <span class="nx">left</span><span class="o">:</span><span class="nx">box</span><span class="p">.</span><span class="nx">left</span>
-        <span class="nx">bottom</span><span class="o">:</span><span class="nx">box</span><span class="p">.</span><span class="nx">bottom</span>
-        <span class="nx">right</span><span class="o">:</span><span class="nx">box</span><span class="p">.</span><span class="nx">right</span>
-      <span class="nv">maxIterations: </span><span class="nx">@maxIterations</span>
-      
-    <span class="nx">worker</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s">&#39;message&#39;</span><span class="p">,</span>
-      <span class="p">(</span><span class="nf">(e) -&gt;</span>
-        <span class="nv">data = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span>
-        <span class="k">switch</span> <span class="nx">data</span><span class="p">.</span><span class="nx">message</span>
-          <span class="k">when</span> <span class="s">&quot;progress&quot;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress .bar&#39;</span><span class="p">).</span><span class="nx">css</span> <span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">value</span><span class="o">+</span><span class="s">&#39;%&#39;</span>
-          <span class="k">when</span> <span class="s">&quot;success&quot;</span>
-            <span class="nx">drawEscapeTimes</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">maxIterations</span><span class="p">,</span> <span class="nx">colorConverter</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">removeClass</span> <span class="s">&#39;progress-striped&#39;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">removeClass</span> <span class="s">&#39;active&#39;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress&#39;</span><span class="p">).</span><span class="nx">addClass</span> <span class="s">&#39;progress-success&#39;</span>
-          <span class="k">else</span>
-            <span class="nb">window</span><span class="p">.</span><span class="nx">alert</span> <span class="s">&quot;Unrecognised message from worker&quot;</span><span class="p">),</span>
-      <span class="kc">false</span>
-    
-    <span class="nx">worker</span><span class="p">.</span><span class="nx">postMessage</span> <span class="nx">message</span>
-      
-  <span class="nv">drawSetInMainThread = </span><span class="nf">(context) -&gt;</span>
-    <span class="k">return</span> <span class="mi">0</span>
-      
-  <span class="nv">drawEscapeTimes = </span><span class="nf">(context, escapeTimes, maxIterations, colorConverter) -&gt;</span>
-    <span class="nv">colorScheme = </span><span class="nx">generateColorScheme</span> <span class="nf">(i) -&gt;</span>
-      <span class="nx">colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span>
-        <span class="nv">h: </span><span class="mi">360</span><span class="o">*</span><span class="nx">i</span><span class="o">/</span><span class="mi">255</span>
-        <span class="nv">s: </span><span class="mi">1</span>
-        <span class="nv">v: </span><span class="mi">1</span>
-    
-    <span class="nv">settings =</span>
-      <span class="nv">isBinary: </span><span class="kc">false</span>
-      <span class="nv">maxIterations: </span><span class="nx">maxIterations</span>
-      <span class="nv">insideSetColor:</span>
-        <span class="nv">r: </span><span class="mi">0</span>
-        <span class="nv">g: </span><span class="mi">0</span>
-        <span class="nv">b: </span><span class="mi">0</span>
-      <span class="nv">colorScheme: </span><span class="nx">colorScheme</span>
-    
-    <span class="nv">width = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
-    <span class="nv">height = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
-    <span class="nv">imageData = </span><span class="nx">context</span><span class="p">.</span><span class="nx">createImageData</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
-    <span class="k">for</span> <span class="nx">row</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">height</span><span class="p">]</span>
-      <span class="nx">do</span> <span class="nf">(row) -&gt;</span>
-        <span class="k">for</span> <span class="nx">column</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">width</span><span class="p">]</span>
-          <span class="nx">do</span><span class="nf">(column) -&gt;</span>
-            <span class="nv">color = </span><span class="nx">getColor</span> <span class="nx">escapeTimes</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">column</span><span class="p">],</span> <span class="nx">settings</span>
-            <span class="nx">setPixel</span> <span class="nx">imageData</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="p">,</span> <span class="mi">255</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="mi">0</span>
-    <span class="nx">context</span><span class="p">.</span><span class="nx">putImageData</span> <span class="nx">imageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-  
-  <span class="nv">getColor = </span><span class="nf">(escapeTime, settings) -&gt;</span>
-    <span class="nv">maxIterations = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">maxIterations</span>
-    <span class="k">if</span> <span class="nx">escapeTime</span> <span class="o">&gt;=</span> <span class="nx">maxIterations</span>
-      <span class="nv">r: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">r</span>
-      <span class="nv">g: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">g</span>
-      <span class="nv">b: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">b</span>
-    <span class="k">else</span>
-      <span class="k">if</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">isBinary</span>
-        <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
-      <span class="k">else</span>
-        <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="mi">255</span><span class="o">*</span><span class="p">(</span><span class="nx">escapeTime</span><span class="o">/</span><span class="nx">maxIterations</span><span class="p">)]</span>
-      <span class="nv">r: </span><span class="nx">color</span><span class="p">.</span><span class="nx">r</span>
-      <span class="nv">g: </span><span class="nx">color</span><span class="p">.</span><span class="nx">g</span>
-      <span class="nv">b: </span><span class="nx">color</span><span class="p">.</span><span class="nx">b</span>
-      
-  <span class="nv">generateColorScheme = </span><span class="nf">(func) -&gt;</span>
-    <span class="nx">func</span> <span class="nx">i</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">255</span><span class="p">]</span>
-        
-  
-  <span class="nv">setPixel = </span><span class="nf">(imageData, x, y, r, g, b, a) -&gt;</span>
-    <span class="nv">index = </span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span> <span class="o">*</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">r</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">g</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">b</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span>
-  
-  <span class="nv">setCanvasSize = </span><span class="nf">(canvasId, context) -&gt;</span>
-    <span class="nv">width = </span><span class="nx">$</span><span class="p">(</span><span class="s">&#39;#&#39;</span> <span class="o">+</span> <span class="nx">canvasId</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">width</span><span class="p">()</span>
+  <span class="nv">setCanvasSize = </span><span class="nf">(canvasElement, context) -&gt;</span>
+    <span class="nv">width = </span><span class="nx">$</span><span class="p">(</span><span class="nx">canvasElement</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">width</span><span class="p">()</span>
     <span class="nv">context.canvas.width = </span><span class="nx">width</span>
     <span class="nv">context.canvas.height = </span><span class="nx">width</span> <span class="o">*</span> <span class="mi">2</span><span class="o">/</span><span class="mf">3.0</span>
-    <span class="k">return</span> <span class="mi">0</span>
-    
-<span class="nb">window</span><span class="p">.</span><span class="nv">Mandelbrot = </span><span class="nx">Mandelbrot</span>
+    <span class="k">return</span> <span class="mi">0</span></pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><p>I would be overkill to do this in an abstract factory</p>
+</td><td class="code"><div class="highlight"><pre><span class="nv">core = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotCore</span><span class="p">()</span>
+<span class="nv">colors = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotColors</span><span class="p">()</span>
+<span class="nv">canvasElement = </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span> <span class="s">&#39;mandlebrot&#39;</span>
+<span class="nv">mandelbrot = </span><span class="k">new</span> <span class="nx">Mandelbrot</span><span class="p">(</span><span class="nx">canvasElement</span><span class="p">)</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Mon Jun 18 2012 20:08:55 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 11:44:45 GMT+0100 (BST)  </div></div></body></html>
