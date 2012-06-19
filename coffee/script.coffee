@@ -13,12 +13,3 @@ $ ->
   window.prettyPrint()
   # Set up [bootstrap tooltips](http://twitter.github.com/bootstrap/javascript.html#tooltips).
   $('[rel=tooltip]').tooltip({placement:'right'})
-  
-  # **Todo**: Should *definitely* do this using [require](http://requirejs.org/).
-  # Mandelbrot set will be drawn in the `#mandelbrot` canvas if there is one.
-  if $('#mandelbrot').length
-    # Color converter deals with moving between RGB and HSV.
-    colorConverter = new window.ColorConverter()
-    # Mandelbrot will do all our calculation and drawing
-    mandelbrot = new window.Mandelbrot(colorConverter)
-    mandelbrot.run 'mandelbrot'

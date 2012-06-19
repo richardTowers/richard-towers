@@ -5,16 +5,10 @@
   $ = jQuery;
 
   $(function() {
-    var colorConverter, mandelbrot;
     window.prettyPrint();
-    $('[rel=tooltip]').tooltip({
+    return $('[rel=tooltip]').tooltip({
       placement: 'right'
     });
-    if ($('#mandelbrot').length) {
-      colorConverter = new window.ColorConverter();
-      mandelbrot = new window.Mandelbrot(colorConverter);
-      return mandelbrot.run('mandelbrot');
-    }
   });
 
 }).call(this);

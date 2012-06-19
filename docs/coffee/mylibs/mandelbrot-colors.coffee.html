@@ -3,7 +3,7 @@
   </pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
 </td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>Assigns our colorConverter and sets up some defaults</p>
 </td><td class="code"><div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(@colorConverter, maxIterations, loopEvery) -&gt;</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Check that the passed in color converter looks kosher</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="k">throw</span> <span class="s">&quot;Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:}).&quot;</span> <span class="nx">unless</span> <span class="nx">@colorConverter</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span><span class="o">?</span>
+</td><td class="code"><div class="highlight"><pre>    <span class="k">throw</span> <span class="s">&quot;Cannot construct MandelbrotColors without a colorConverter that imlements colorToRgb({h:,s:,v:}).&quot;</span> <span class="nx">unless</span> <span class="nx">@colorConverter</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span><span class="o">?</span>
     </pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Some preset coloring functions</p>
 </td><td class="code"><div class="highlight"><pre>    <span class="vi">@coloringFunctions =</span>
       <span class="nv">hue: </span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span>
@@ -78,4 +78,6 @@ This prevents us from having to execute a (potentially) expensive function for e
     <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">b</span>
     <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 11:44:45 GMT+0100 (BST)  </div></div></body></html>
+<span class="nb">window</span><span class="p">.</span><span class="nv">MandelbrotColors = </span><span class="nx">MandelbrotColors</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 15:19:38 GMT+0100 (BST)  </div></div></body></html>

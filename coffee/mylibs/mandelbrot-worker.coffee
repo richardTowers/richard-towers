@@ -18,7 +18,7 @@ listener = (e) ->
   # Unpack data from call
   data = JSON.parse e.data
   # Calculate escape times
-  escapeTimes = mandelbrot.getEscapeTimes data.width, data.height, data.box, data.maxIterations, this
+  escapeTimes = mandelbrot.getEscapeTimes data.width, data.height, data.box, data.maxIterations
   # Build a message with the results
   message = JSON.stringify
     message:"success"

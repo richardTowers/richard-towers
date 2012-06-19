@@ -6,7 +6,7 @@ class MandelbrotColors
   # Assigns our colorConverter and sets up some defaults
   constructor: (@colorConverter, maxIterations, loopEvery) ->
     # Check that the passed in color converter looks kosher
-    throw "Cannot construct a Mandelbrot without a colorConverter that imlements colorToRgb({h:,s:,v:})." unless @colorConverter? and @colorConverter.colorToRgb?
+    throw "Cannot construct MandelbrotColors without a colorConverter that imlements colorToRgb({h:,s:,v:})." unless @colorConverter? and @colorConverter.colorToRgb?
     
     # Some preset coloring functions
     @coloringFunctions =
@@ -38,7 +38,7 @@ class MandelbrotColors
   
   # ###drawEscapeTimes
   # Takes a canvas context and draws the escape times
-  drawEscapeTimesInContext = (context, escapeTimes) =>
+  drawEscapeTimesInContext: (escapeTimes, context) =>
     width = context.canvas.width
     height = context.canvas.height
     imageData = context.createImageData width, height
@@ -46,7 +46,7 @@ class MandelbrotColors
       do (row) =>
         for column in [0..width]
           do(column) =>
-            color = getColor escapeTimes[row][column]
+            color = getColor escapeTimes[row][column], @settings
             setPixel imageData, column, row, color.r, color.g, color.b, 255
             return 0
         return 0
@@ -62,19 +62,19 @@ class MandelbrotColors
   
   # ###getColor
   # Get the color corresponding to this escape time
-  getColor = (escapeTime) =>
-    maxIterations = @settings.maxIterations
+  getColor = (escapeTime, settings) =>
+    maxIterations = settings.maxIterations
     if escapeTime >= maxIterations
-      r: @settings.insideSetColor.r
-      g: @settings.insideSetColor.g
-      b: @settings.insideSetColor.b
+      r: settings.insideSetColor.r
+      g: settings.insideSetColor.g
+      b: settings.insideSetColor.b
     else
-      if @settings.isBinary
-        color = @settings.colorScheme[0] 
+      if settings.isBinary
+        color = settings.colorScheme[0] 
       else
-        loopEvery = @settings.loopEvery
-        index = (escapeTime - Math.floor(escapeTime/loopEvery)*loopEvery)*(255/loopEvery)
-        color = @settings.colorScheme[index]
+        loopEvery = settings.loopEvery
+        index = Math.floor (escapeTime - Math.floor(escapeTime/loopEvery)*loopEvery)*(255/loopEvery)
+        color = settings.colorScheme[index]
       return color
   
   # ###setPixel
@@ -85,3 +85,5 @@ class MandelbrotColors
     imageData.data[index+1] = g
     imageData.data[index+2] = b
     imageData.data[index+3] = a
+
+window.MandelbrotColors = MandelbrotColors

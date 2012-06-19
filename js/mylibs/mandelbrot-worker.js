@@ -15,7 +15,7 @@ listener = function(e) {
     return _this.postMessage(message);
   });
   data = JSON.parse(e.data);
-  escapeTimes = mandelbrot.getEscapeTimes(data.width, data.height, data.box, data.maxIterations, this);
+  escapeTimes = mandelbrot.getEscapeTimes(data.width, data.height, data.box, data.maxIterations);
   message = JSON.stringify({
     message: "success",
     value: escapeTimes
