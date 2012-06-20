@@ -7446,8 +7446,11 @@ body {
 .no-js .js-only {
   display: none;
 }
-.webworkers .no-webworkers-message {
+.no-webworkers-message {
   display: none;
+}
+.no-webworkers .no-webworkers-message {
+  display: inherit;
 }
 .no-webworkers #mandelbrotProgress {
   display: none;
