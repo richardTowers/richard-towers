@@ -1,6 +1,5 @@
 # @licence This code is [unlicenced](http://unlicense.org/UNLICENSE).
 
-# A controller for the mandelbrot demo.
 window.require [
     "jquery",
     "libs/modernizr-2.5.3-respond-1.1.0.min",
@@ -9,6 +8,7 @@ window.require [
     "mylibs/color-converter",
     "mylibs/mandelbrot-colors"
   ],
+  # A controller for the mandelbrot demo.
   ($) ->
     class Mandelbrot
       
