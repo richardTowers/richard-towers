@@ -65,16 +65,20 @@
         var resizeTimer;
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout((function() {
-          return setCanvasSize(canvasElement, context);
+          return setCanvasSize(canvasElement, context, _this.mandelbrotColors.cachedImage);
         }), 100);
       });
     }
 
-    setCanvasSize = function(canvasElement, context) {
-      var width;
+    setCanvasSize = function(canvasElement, context, cachedImage) {
+      var height, width;
       width = $(canvasElement).parent().width();
+      height = width * 2 / 3.0;
       context.canvas.width = width;
-      context.canvas.height = width * 2 / 3.0;
+      context.canvas.height = height;
+      if (cachedImage != null) {
+        context.drawImage(cachedImage, 0, 0, width, height);
+      }
     };
 
     return Mandelbrot;

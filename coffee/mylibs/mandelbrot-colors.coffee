@@ -33,6 +33,8 @@ class MandelbrotColors
         g: 0
         b: 0
       colorScheme: colorScheme
+    
+    @cachedImage = new Image()
   
   # ##Public Methods
   
@@ -51,6 +53,8 @@ class MandelbrotColors
             return 0
         return 0
     context.putImageData imageData, 0, 0
+    dataToCache = context.canvas.toDataURL 'image/png'
+    @cachedImage.src = dataToCache
 
   
   # ##Private Methods

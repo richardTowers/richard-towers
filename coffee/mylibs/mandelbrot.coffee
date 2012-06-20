@@ -53,15 +53,18 @@ class Mandelbrot
     @drawSet()
     
     # Attach resize code to resive event
-    $(window).resize ->
+    $(window).resize =>
       clearTimeout resizeTimer
-      resizeTimer = setTimeout (() -> setCanvasSize canvasElement, context), 100 
+      resizeTimer = setTimeout (() => setCanvasSize canvasElement, context, @mandelbrotColors.cachedImage), 100
       return
     
-  setCanvasSize = (canvasElement, context) ->
+  setCanvasSize = (canvasElement, context, cachedImage) ->
     width = $(canvasElement).parent().width()
+    height = width * 2/3.0
     context.canvas.width = width
-    context.canvas.height = width * 2/3.0
+    context.canvas.height = height
+    if cachedImage?
+      context.drawImage cachedImage, 0, 0, width, height
     return
 
 # I think it would be overkill to do this in a factory

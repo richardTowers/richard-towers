@@ -44,10 +44,11 @@
         },
         colorScheme: colorScheme
       };
+      this.cachedImage = new Image();
     }
 
     MandelbrotColors.prototype.drawEscapeTimesInContext = function(escapeTimes, context) {
-      var height, imageData, row, width, _fn, _i,
+      var dataToCache, height, imageData, row, width, _fn, _i,
         _this = this;
       width = context.canvas.width;
       height = context.canvas.height;
@@ -68,7 +69,9 @@
       for (row = _i = 0; 0 <= height ? _i <= height : _i >= height; row = 0 <= height ? ++_i : --_i) {
         _fn(row);
       }
-      return context.putImageData(imageData, 0, 0);
+      context.putImageData(imageData, 0, 0);
+      dataToCache = context.canvas.toDataURL('image/png');
+      return this.cachedImage.src = dataToCache;
     };
 
     generateColorScheme = function(func) {
