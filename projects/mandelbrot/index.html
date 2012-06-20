@@ -13,14 +13,8 @@
 
 	<meta name="viewport" content="width=device-width">
 
-	<!--
-	<link rel="stylesheet/less" href="less/style.less">
-	<script src="js/libs/less-1.3.0.min.js"></script>
-	-->
-
 	<link rel="stylesheet" href="../../css/style.css">
-
-	<script src="../../js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+	<script data-main="../../js/mandelbrot.js" src="../../js/libs/require-jquery.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-fixed-top">
@@ -87,13 +81,6 @@
             <a class="pull-right" data-toggle="collapse" data-target="#settingsGroup" href="#">Show/Hide Settings</a>
           </div>
           <div id="settingsGroup" class="collapse in">
-            <div id="depthSettings" class="well">
-              <h2>Depth</h2>
-                <label for="maxIterations">Maximum Iterations</label>
-                <input type="number" value="30" id="maxIterations" min="0" max="100000" step="10"
-                rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
-                <button id="maxIterationsButton" class="btn">Recalculate &raquo;</button>
-            </div>
             <div id="colorSettings" class="well">
               <h2>Colouring</h2>
               <h3>Algorithm</h3>
@@ -104,7 +91,14 @@
               <label>Monochrome<input type="radio" name="coloringScheme" value="Monochrome" class="pull-right" checked></label>
               <label>Hue<input type="radio" name="coloringScheme" value="Hue" class="pull-right"></label>
               <label>Loop colours every:<input type="number" name="loop" placeholder="Iterations"></label>
-              <button id="redrawButton" class="btn">Redraw &raquo;</button>
+              <button id="redrawButton" class="btn"><i class="icon-refresh"></i> Redraw</button>
+            </div>
+            <div id="depthSettings" class="well">
+              <h2>Calculation</h2>
+                <label for="maxIterations">Maximum Iterations</label>
+                <input type="number" value="30" id="maxIterations" min="0" max="100000" step="10"
+                rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
+                <button id="maxIterationsButton" class="btn"><i class="icon-refresh"></i> Recalculate</button>
             </div>
           </div>
         </div>
@@ -113,7 +107,9 @@
             <div class="bar"></div>
           </div>
           <canvas id="mandelbrot"></canvas>
-          <button class="btn pull-right">Redraw &raquo;</button><button class="btn pull-right">Export as PNG</button>
+          <div id="mandelbrotControls">
+            <button class="btn pull-right"><i class="icon-picture"></i> View as image</button>
+          </div>
         </div>
       </div>
       
@@ -166,19 +162,6 @@
       </footer>
 
     </div> <!-- /container -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../js/libs/jquery-1.7.2.min.js"><\/script>')</script>
-
-<script src="../../js/mylibs/color-converter.js"></script>
-<script src="../../js/mylibs/mandelbrot-colors.js"></script>
-<script src="../../js/mylibs/mandelbrot-core.js"></script>
-<script src="../../js/mylibs/mandelbrot.js"></script>
-<script src="../../js/mylibs/prettify.js"></script>
-<script src="../../js/libs/bootstrap.min.js"></script>
-
-<!-- scripts concatenated and minified via ant build script-->
-<script src="../../js/script.js"></script>
-<!-- end scripts-->
 
 <script>
 	var _gaq=[['_setAccount','UA-24870957-1'],['_trackPageview']];
