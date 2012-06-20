@@ -482,7 +482,7 @@
 
   <target name="-copyall" depends="-mkdirs">
   <!-- This is a private target -->
-<!-- Copies all files, including .css and .js files for when you aren't minifying-->
+  <!-- Copies all files, including .css and .js files for when you aren't minifying-->
       <echo message="Copying over all files..."/>
 
       <copy todir="./${dir.publish}">
@@ -493,6 +493,12 @@
 
       <echo message="A copy of all non-dev files are now in: ./${dir.publish}."/>
   </target>
+  
+  <!-- COFFEESCRIPT -->
+  <!-- Todo: currently this is done separately by CodeKit -->
+  
+  <!-- LESS -->
+  <!-- Todo: currently this is done separately by CodeKit -->
 
   <!-- JAVASCRIPT -->
   <target name="-js.main.concat" depends="-js.all.minify" description="(PRIVATE) Concatenates the JS files in dir.js">
@@ -534,7 +540,7 @@
       <property name="scripts.js" value="${dir.js}/${scripts.sha}.js" />
       <copy file="${dir.intermediate}/${dir.js}/scripts-concat.min.js" tofile="${dir.publish}/${dir.js}/${scripts.sha}.js" />
   
-  <!-- cachebust modules directory name -->
+      <!-- cachebust modules directory name -->
       <!-- Concatenate only to generate checksum. Concatenated file not actually published. -->
       <if>
           <available file="./${dir.intermediate}/${dir.js.modules}"/>
