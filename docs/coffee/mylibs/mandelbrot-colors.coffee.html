@@ -27,6 +27,8 @@
         <span class="nv">g: </span><span class="mi">0</span>
         <span class="nv">b: </span><span class="mi">0</span>
       <span class="nv">colorScheme: </span><span class="nx">colorScheme</span>
+    
+    <span class="vi">@cachedImage = </span><span class="k">new</span> <span class="nx">Image</span><span class="p">()</span>
   </pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><h2>Public Methods</h2>
 </td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><h3>drawEscapeTimes</h3>
 
@@ -44,6 +46,8 @@
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="nx">context</span><span class="p">.</span><span class="nx">putImageData</span> <span class="nx">imageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="nv">dataToCache = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span> <span class="s">&#39;image/png&#39;</span>
+    <span class="vi">@cachedImage.src = </span><span class="nx">dataToCache</span>
 
   </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><h2>Private Methods</h2>
 </td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-11"><td class="docs"><div class="pilwrap"><a href="#section-11" class="pilcrow">&#182;</a></div><h3>generateColorScheme</h3>
@@ -80,4 +84,4 @@ This prevents us from having to execute a (potentially) expensive function for e
 
 <span class="nb">window</span><span class="p">.</span><span class="nv">MandelbrotColors = </span><span class="nx">MandelbrotColors</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 16:47:38 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Wed Jun 20 2012 22:00:38 GMT+0100 (BST)  </div></div></body></html>

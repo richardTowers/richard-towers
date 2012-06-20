@@ -1,64 +1,78 @@
 <!DOCTYPE html><html><head><title>mandelbrot.coffee</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../../index.html" class="source"><span class="file_name">README</span></a><a href="../../coffee/mylibs/color-converter.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">color-converter.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-colors.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-colors.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-core.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-core.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-worker.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-worker.coffee</span></a><a href="../../coffee/mylibs/mandelbrot.coffee.html" class="source selected"><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot.coffee</span></a><a href="../../coffee/script.coffee.html" class="source "><span class="base_path">coffee / </span><span class="file_name">script.coffee</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>mandelbrot.coffee</h1><div class="filepath">coffee/mylibs/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div><p>@licence This code is <a href="http://unlicense.org/UNLICENSE">unlicenced</a>.</p>
 </td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><p>A controller for the mandelbrot demo.</p>
-</td><td class="code"><div class="highlight"><pre><span class="k">class</span> <span class="nx">Mandelbrot</span>
-  </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
-</td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Set up dependencies and defaults</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(@mandelbrotCore, @mandelbrotColors, canvasElement) -&gt;</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Null check dependencies</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="k">throw</span> <span class="s">&quot;mandelbrotCore is required&quot;</span> <span class="nx">unless</span> <span class="nx">@mandelbrotCore</span><span class="o">?</span>
-    <span class="k">throw</span> <span class="s">&quot;mandelbrotColors is required&quot;</span> <span class="nx">unless</span> <span class="nx">@mandelbrotColors</span><span class="o">?</span>
-    <span class="k">throw</span> <span class="s">&quot;A canvas element is required&quot;</span> <span class="nx">unless</span> <span class="nx">canvasElement</span><span class="o">?</span>
-    </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Starting bounding box</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="vi">@box = </span>
-      <span class="nv">top: </span><span class="mi">1</span>
-      <span class="nv">left: </span><span class="o">-</span><span class="mi">2</span>
-      <span class="nv">bottom: </span><span class="o">-</span><span class="mi">1</span>
-      <span class="nv">right: </span><span class="mi">1</span>
-    
-    <span class="nv">context = </span><span class="nx">canvasElement</span><span class="p">.</span><span class="nx">getContext</span> <span class="s">&#39;2d&#39;</span>
-    <span class="k">throw</span> <span class="s">&#39;Could not build 2d canvas context in canvas&#39;</span> <span class="nx">unless</span> <span class="nx">context</span><span class="o">?</span>
-    
-    <span class="nx">setCanvasSize</span> <span class="nx">canvasElement</span><span class="p">,</span> <span class="nx">context</span>
-    
-    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Modernizr</span><span class="p">.</span><span class="nx">webworkers</span> <span class="o">and</span> <span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span></pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Use a web worker to do the magic</p>
-</td><td class="code"><div class="highlight"><pre>      <span class="nv">worker = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Worker</span> <span class="s">&#39;../../js/mylibs/mandelbrot-worker.js&#39;</span>
-      <span class="vi">@drawSet = </span><span class="p">()</span> <span class="o">=&gt;</span>
-        <span class="nv">message = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span>
-          <span class="nv">message: </span><span class="s">&quot;run&quot;</span>
-          <span class="nv">width: </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
-          <span class="nv">height: </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
-          <span class="nv">box: </span><span class="nx">@box</span>
-          <span class="nv">maxIterations: </span><span class="mi">30</span>
-        <span class="nx">worker</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s">&#39;message&#39;</span><span class="p">,</span>
-          <span class="p">((</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
-            <span class="nv">data = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span>
-            <span class="k">switch</span> <span class="nx">data</span><span class="p">.</span><span class="nx">message</span>
-              <span class="k">when</span> <span class="s">&quot;progress&quot;</span>
-                <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress .bar&#39;</span><span class="p">).</span><span class="nx">css</span> <span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">value</span><span class="o">+</span><span class="s">&#39;%&#39;</span>
-              <span class="k">when</span> <span class="s">&quot;success&quot;</span>
-                <span class="nx">@mandelbrotColors</span><span class="p">.</span><span class="nx">drawEscapeTimesInContext</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span>
-            <span class="p">),</span> <span class="kc">false</span>
-        <span class="nx">worker</span><span class="p">.</span><span class="nx">postMessage</span> <span class="nx">message</span>
-    <span class="k">else</span></pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><p>Do the magic ourself :-(</p>
-</td><td class="code"><div class="highlight"><pre>      <span class="vi">@drawSet = </span><span class="p">()</span> <span class="o">=&gt;</span>
-        <span class="nv">escapeTimes = </span><span class="nx">@mandelbrotCore</span><span class="p">.</span><span class="nx">getEscapeTimes</span> <span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">@box</span><span class="p">,</span> <span class="mi">30</span>
-        <span class="nx">@mandelbrotColors</span><span class="p">.</span><span class="nx">drawEscapeTimesInContext</span><span class="p">(</span><span class="nx">escapeTimes</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span>
-    
-    <span class="nx">@drawSet</span><span class="p">()</span>
-    </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><p>Attach resize code to resive event</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span> <span class="o">-&gt;</span>
-      <span class="nx">clearTimeout</span> <span class="nx">resizeTimer</span>
-      <span class="nv">resizeTimer = </span><span class="nx">setTimeout</span> <span class="p">(</span><span class="nf">() -&gt;</span> <span class="nx">setCanvasSize</span> <span class="nx">canvasElement</span><span class="p">,</span> <span class="nx">context</span><span class="p">),</span> <span class="mi">100</span> 
-      <span class="k">return</span>
-    
-  <span class="nv">setCanvasSize = </span><span class="nf">(canvasElement, context) -&gt;</span>
-    <span class="nv">width = </span><span class="nx">$</span><span class="p">(</span><span class="nx">canvasElement</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">width</span><span class="p">()</span>
-    <span class="nv">context.canvas.width = </span><span class="nx">width</span>
-    <span class="nv">context.canvas.height = </span><span class="nx">width</span> <span class="o">*</span> <span class="mi">2</span><span class="o">/</span><span class="mf">3.0</span>
-    <span class="k">return</span></pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><p>I think it would be overkill to do this in a factory</p>
-</td><td class="code"><div class="highlight"><pre><span class="nv">core = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotCore</span><span class="p">()</span>
-<span class="nv">colorConverter = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ColorConverter</span><span class="p">()</span>
-<span class="nv">colors = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotColors</span><span class="p">(</span><span class="nx">colorConverter</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="nv">canvasElement = </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s">&#39;mandelbrot&#39;</span><span class="p">)</span>
-<span class="nv">mandelbrot = </span><span class="k">new</span> <span class="nx">Mandelbrot</span><span class="p">(</span><span class="nx">core</span><span class="p">,</span> <span class="nx">colors</span><span class="p">,</span> <span class="nx">canvasElement</span><span class="p">)</span>
+</td><td class="code"><div class="highlight"><pre><span class="nb">window</span><span class="p">.</span><span class="nx">require</span> <span class="p">[</span>
+    <span class="s">&quot;jquery&quot;</span><span class="p">,</span>
+    <span class="s">&quot;libs/modernizr-2.5.3-respond-1.1.0.min&quot;</span><span class="p">,</span>
+    <span class="s">&quot;script&quot;</span><span class="p">,</span>
+    <span class="s">&quot;mylibs/mandelbrot-core&quot;</span><span class="p">,</span>
+    <span class="s">&quot;mylibs/color-converter&quot;</span><span class="p">,</span>
+    <span class="s">&quot;mylibs/mandelbrot-colors&quot;</span>
+  <span class="p">],</span>
+  <span class="nf">($) -&gt;</span>
+    <span class="k">class</span> <span class="nx">Mandelbrot</span>
+      </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
+</td><td class="code"><div class="highlight"><pre>      </pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Set up dependencies and defaults</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="nv">constructor: </span><span class="nf">(@mandelbrotCore, @mandelbrotColors, canvasElement) -&gt;</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Null check dependencies</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="k">throw</span> <span class="s">&quot;mandelbrotCore is required&quot;</span> <span class="nx">unless</span> <span class="nx">@mandelbrotCore</span><span class="o">?</span>
+        <span class="k">throw</span> <span class="s">&quot;mandelbrotColors is required&quot;</span> <span class="nx">unless</span> <span class="nx">@mandelbrotColors</span><span class="o">?</span>
+        <span class="k">throw</span> <span class="s">&quot;A canvas element is required&quot;</span> <span class="nx">unless</span> <span class="nx">canvasElement</span><span class="o">?</span>
+        </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Starting bounding box</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="vi">@box = </span>
+          <span class="nv">top: </span><span class="mi">1</span>
+          <span class="nv">left: </span><span class="o">-</span><span class="mi">2</span>
+          <span class="nv">bottom: </span><span class="o">-</span><span class="mi">1</span>
+          <span class="nv">right: </span><span class="mi">1</span>
+        
+        <span class="nv">context = </span><span class="nx">canvasElement</span><span class="p">.</span><span class="nx">getContext</span> <span class="s">&#39;2d&#39;</span>
+        <span class="k">throw</span> <span class="s">&#39;Could not build 2d canvas context in canvas&#39;</span> <span class="nx">unless</span> <span class="nx">context</span><span class="o">?</span>
+        
+        <span class="nx">setCanvasSize</span> <span class="nx">canvasElement</span><span class="p">,</span> <span class="nx">context</span>
+        
+        <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Modernizr</span><span class="p">.</span><span class="nx">webworkers</span> <span class="o">and</span> <span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span></pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Use a web worker to do the magic</p>
+</td><td class="code"><div class="highlight"><pre>          <span class="nv">worker = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Worker</span> <span class="s">&#39;../../js/mylibs/mandelbrot-worker.js&#39;</span>
+          <span class="vi">@drawSet = </span><span class="p">()</span> <span class="o">=&gt;</span>
+            <span class="nv">message = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span>
+              <span class="nv">message: </span><span class="s">&quot;run&quot;</span>
+              <span class="nv">width: </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
+              <span class="nv">height: </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
+              <span class="nv">box: </span><span class="nx">@box</span>
+              <span class="nv">maxIterations: </span><span class="mi">30</span>
+            <span class="nx">worker</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="s">&#39;message&#39;</span><span class="p">,</span>
+              <span class="p">((</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+                <span class="nv">data = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span>
+                <span class="k">switch</span> <span class="nx">data</span><span class="p">.</span><span class="nx">message</span>
+                  <span class="k">when</span> <span class="s">&quot;progress&quot;</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#mandelbrotProgress .bar&#39;</span><span class="p">).</span><span class="nx">css</span> <span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">value</span><span class="o">+</span><span class="s">&#39;%&#39;</span>
+                  <span class="k">when</span> <span class="s">&quot;success&quot;</span>
+                    <span class="nx">@mandelbrotColors</span><span class="p">.</span><span class="nx">drawEscapeTimesInContext</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span>
+                <span class="p">),</span> <span class="kc">false</span>
+            <span class="nx">worker</span><span class="p">.</span><span class="nx">postMessage</span> <span class="nx">message</span>
+        <span class="k">else</span></pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><p>Do the magic ourself :-(</p>
+</td><td class="code"><div class="highlight"><pre>          <span class="vi">@drawSet = </span><span class="p">()</span> <span class="o">=&gt;</span>
+            <span class="nv">escapeTimes = </span><span class="nx">@mandelbrotCore</span><span class="p">.</span><span class="nx">getEscapeTimes</span> <span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">@box</span><span class="p">,</span> <span class="mi">30</span>
+            <span class="nx">@mandelbrotColors</span><span class="p">.</span><span class="nx">drawEscapeTimesInContext</span><span class="p">(</span><span class="nx">escapeTimes</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span>
+        
+        <span class="nx">@drawSet</span><span class="p">()</span>
+        </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><p>Attach resize code to resive event</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span> <span class="o">=&gt;</span>
+          <span class="nx">clearTimeout</span> <span class="nx">resizeTimer</span>
+          <span class="nv">resizeTimer = </span><span class="nx">setTimeout</span> <span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">setCanvasSize</span> <span class="nx">canvasElement</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">@mandelbrotColors</span><span class="p">.</span><span class="nx">cachedImage</span><span class="p">),</span> <span class="mi">100</span>
+          <span class="k">return</span>
+        
+      <span class="nv">setCanvasSize = </span><span class="nf">(canvasElement, context, cachedImage) -&gt;</span>
+        <span class="nv">width = </span><span class="nx">$</span><span class="p">(</span><span class="nx">canvasElement</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">width</span><span class="p">()</span>
+        <span class="nv">height = </span><span class="nx">width</span> <span class="o">*</span> <span class="mi">2</span><span class="o">/</span><span class="mf">3.0</span>
+        <span class="nv">context.canvas.width = </span><span class="nx">width</span>
+        <span class="nv">context.canvas.height = </span><span class="nx">height</span>
+        <span class="k">if</span> <span class="nx">cachedImage</span><span class="o">?</span>
+          <span class="nx">context</span><span class="p">.</span><span class="nx">drawImage</span> <span class="nx">cachedImage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
+        <span class="k">return</span>
+    </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><p>I think it would be overkill to do this in a factory</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">core = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotCore</span><span class="p">()</span>
+    <span class="nv">colorConverter = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ColorConverter</span><span class="p">()</span>
+    <span class="nv">colors = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotColors</span><span class="p">(</span><span class="nx">colorConverter</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="nv">canvasElement = </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s">&#39;mandelbrot&#39;</span><span class="p">)</span>
+    <span class="nv">mandelbrot = </span><span class="k">new</span> <span class="nx">Mandelbrot</span><span class="p">(</span><span class="nx">core</span><span class="p">,</span> <span class="nx">colors</span><span class="p">,</span> <span class="nx">canvasElement</span><span class="p">)</span>
+    <span class="k">return</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jun 19 2012 16:47:39 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Wed Jun 20 2012 22:00:39 GMT+0100 (BST)  </div></div></body></html>
