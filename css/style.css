@@ -7492,11 +7492,13 @@ input {
 #mandelbrotControls button {
   margin-left: 5px;
 }
-.navbar .nav .dropdown-menu > .active > a {
-  background-color: #59f;
-}
-.navbar .nav .dropdown-menu > .active > a:hover {
-  background-color: #08c;
+@media (min-width: 768px) {
+  .navbar .nav .dropdown-menu > .active > a {
+    background-color: #59f;
+  }
+  .navbar .nav .dropdown-menu > .active > a:hover {
+    background-color: #08c;
+  }
 }
 /* ==== Prettify ===============================================================
    Author: Richard Towers
