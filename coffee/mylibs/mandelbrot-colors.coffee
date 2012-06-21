@@ -67,16 +67,14 @@ class MandelbrotColors
   # ###getColor
   # Get the color corresponding to this escape time
   getColor = (escapeTime, settings) =>
-    maxIterations = settings.maxIterations
+    maxIterations = settings.maxIterations()
     if escapeTime >= maxIterations
-      r: settings.insideSetColor.r
-      g: settings.insideSetColor.g
-      b: settings.insideSetColor.b
+      return settings.insideSetColor
     else
       if settings.isBinary
         color = settings.colorScheme[0] 
       else
-        loopEvery = settings.loopEvery
+        loopEvery = settings.loopEvery()
         index = Math.floor (escapeTime - Math.floor(escapeTime/loopEvery)*loopEvery)*(255/loopEvery)
         color = settings.colorScheme[index]
       return color

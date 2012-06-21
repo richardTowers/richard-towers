@@ -85,18 +85,14 @@
 
     getColor = function(escapeTime, settings) {
       var color, index, loopEvery, maxIterations;
-      maxIterations = settings.maxIterations;
+      maxIterations = settings.maxIterations();
       if (escapeTime >= maxIterations) {
-        return {
-          r: settings.insideSetColor.r,
-          g: settings.insideSetColor.g,
-          b: settings.insideSetColor.b
-        };
+        return settings.insideSetColor;
       } else {
         if (settings.isBinary) {
           color = settings.colorScheme[0];
         } else {
-          loopEvery = settings.loopEvery;
+          loopEvery = settings.loopEvery();
           index = Math.floor((escapeTime - Math.floor(escapeTime / loopEvery) * loopEvery) * (255 / loopEvery));
           color = settings.colorScheme[index];
         }

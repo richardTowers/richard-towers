@@ -4,12 +4,13 @@ window.require [
     "jquery",
     "libs/modernizr-2.5.3-respond-1.1.0.min",
     "script",
+    "libs/knockout-2.1.0",
     "mylibs/mandelbrot-core",
     "mylibs/color-converter",
     "mylibs/mandelbrot-colors"
   ],
   # A controller for the mandelbrot demo.
-  ($) ->
+  ($, modern, script, ko) ->
     class Mandelbrot
       
       # ##Constructor
@@ -59,8 +60,6 @@ window.require [
             escapeTimes = @mandelbrotCore.getEscapeTimes context.canvas.width, context.canvas.height, @box, 30
             @mandelbrotColors.drawEscapeTimesInContext(escapeTimes, context)
         
-        @drawSet()
-        
         # Attach resize code to resive event
         $(window).resize =>
           clearTimeout resizeTimer
@@ -76,10 +75,24 @@ window.require [
           context.drawImage cachedImage, 0, 0, width, height
         return
     
+    # Define our ViewModel (Todo: separate module?)
+    MandelbrotViewModel = () ->
+      @maxIterations = ko.observable 30
+      @loopColorsEvery = ko.observable 30
+      return this
+    
+    viewModel = new MandelbrotViewModel()
+    
     # I think it would be overkill to do this in a factory
     core = new window.MandelbrotCore()
     colorConverter = new window.ColorConverter()
-    colors = new window.MandelbrotColors(colorConverter, 30, 30)
-    canvasElement = document.getElementById('mandelbrot')
-    mandelbrot = new Mandelbrot(core, colors, canvasElement)
+    colors = new window.MandelbrotColors colorConverter, viewModel.maxIterations, viewModel.loopColorsEvery
+    canvasElement = document.getElementById 'mandelbrot'
+    mandelbrot = new Mandelbrot core, colors, canvasElement
+  
+    viewModel.drawSet = mandelbrot.drawSet
+    ko.applyBindings viewModel
+    
+    mandelbrot.drawSet()
+
     return

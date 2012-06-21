@@ -90,13 +90,13 @@
               <h3>Scheme</h3>
               <label>Monochrome<input type="radio" name="coloringScheme" value="Monochrome" class="pull-right" checked></label>
               <label>Hue<input type="radio" name="coloringScheme" value="Hue" class="pull-right"></label>
-              <label>Loop colours every:<input type="number" name="loop" placeholder="Iterations"></label>
-              <button id="redrawButton" class="btn"><i class="icon-refresh"></i> Redraw</button>
+              <label>Loop colours every:<input id="loopColorsEvery" type="number" data-bind="value: loopColorsEvery" placeholder="Iterations"></label>
+              <button data-bind="click: drawSet" class="btn"><i class="icon-refresh"></i> Redraw</button>
             </div>
             <div id="depthSettings" class="well">
               <h2>Calculation</h2>
                 <label for="maxIterations">Maximum Iterations</label>
-                <input type="number" value="30" id="maxIterations" min="0" max="100000" step="10"
+                <input id="maxIterations" type="number" data-bind="value: maxIterations" min="0" max="100000" step="10"
                 rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
                 <button id="maxIterationsButton" class="btn"><i class="icon-refresh"></i> Recalculate</button>
             </div>
@@ -108,7 +108,7 @@
           </div>
           <canvas id="mandelbrot"></canvas>
           <div id="mandelbrotControls">
-            <button class="btn pull-right"><i class="icon-picture"></i> View as image</button>
+            <button id="viewAsImage" class="btn pull-right"><i class="icon-picture"></i> View as image</button>
           </div>
         </div>
       </div>
