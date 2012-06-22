@@ -59,16 +59,14 @@ This prevents us from having to execute a (potentially) expensive function for e
 
 <p>Get the color corresponding to this escape time</p>
 </td><td class="code"><div class="highlight"><pre>  <span class="nv">getColor = </span><span class="p">(</span><span class="nx">escapeTime</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="nv">maxIterations = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">maxIterations</span>
+    <span class="nv">maxIterations = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">maxIterations</span><span class="p">()</span>
     <span class="k">if</span> <span class="nx">escapeTime</span> <span class="o">&gt;=</span> <span class="nx">maxIterations</span>
-      <span class="nv">r: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">r</span>
-      <span class="nv">g: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">g</span>
-      <span class="nv">b: </span><span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span><span class="p">.</span><span class="nx">b</span>
+      <span class="k">return</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span>
     <span class="k">else</span>
       <span class="k">if</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">isBinary</span>
         <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
       <span class="k">else</span>
-        <span class="nv">loopEvery = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">loopEvery</span>
+        <span class="nv">loopEvery = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">loopEvery</span><span class="p">()</span>
         <span class="nv">index = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="p">(</span><span class="nx">escapeTime</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">escapeTime</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">255</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span>
         <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
       <span class="k">return</span> <span class="nx">color</span>
@@ -84,4 +82,4 @@ This prevents us from having to execute a (potentially) expensive function for e
 
 <span class="nb">window</span><span class="p">.</span><span class="nv">MandelbrotColors = </span><span class="nx">MandelbrotColors</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Wed Jun 20 2012 22:06:29 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Fri Jun 22 2012 17:48:02 GMT+0100 (BST)  </div></div></body></html>

@@ -3,11 +3,12 @@
     <span class="s">&quot;jquery&quot;</span><span class="p">,</span>
     <span class="s">&quot;libs/modernizr-2.5.3-respond-1.1.0.min&quot;</span><span class="p">,</span>
     <span class="s">&quot;script&quot;</span><span class="p">,</span>
+    <span class="s">&quot;libs/knockout-2.1.0&quot;</span><span class="p">,</span>
     <span class="s">&quot;mylibs/mandelbrot-core&quot;</span><span class="p">,</span>
     <span class="s">&quot;mylibs/color-converter&quot;</span><span class="p">,</span>
     <span class="s">&quot;mylibs/mandelbrot-colors&quot;</span>
   <span class="p">],</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><p>A controller for the mandelbrot demo.</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nf">($) -&gt;</span>
+</td><td class="code"><div class="highlight"><pre>  <span class="nf">($, modern, script, ko) -&gt;</span>
     <span class="k">class</span> <span class="nx">Mandelbrot</span>
       </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
 </td><td class="code"><div class="highlight"><pre>      </pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Set up dependencies and defaults</p>
@@ -50,8 +51,6 @@
 </td><td class="code"><div class="highlight"><pre>          <span class="vi">@drawSet = </span><span class="p">()</span> <span class="o">=&gt;</span>
             <span class="nv">escapeTimes = </span><span class="nx">@mandelbrotCore</span><span class="p">.</span><span class="nx">getEscapeTimes</span> <span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">@box</span><span class="p">,</span> <span class="mi">30</span>
             <span class="nx">@mandelbrotColors</span><span class="p">.</span><span class="nx">drawEscapeTimesInContext</span><span class="p">(</span><span class="nx">escapeTimes</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span>
-        
-        <span class="nx">@drawSet</span><span class="p">()</span>
         </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><p>Attach resize code to resive event</p>
 </td><td class="code"><div class="highlight"><pre>        <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span> <span class="o">=&gt;</span>
           <span class="nx">clearTimeout</span> <span class="nx">resizeTimer</span>
@@ -66,12 +65,27 @@
         <span class="k">if</span> <span class="nx">cachedImage</span><span class="o">?</span>
           <span class="nx">context</span><span class="p">.</span><span class="nx">drawImage</span> <span class="nx">cachedImage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
         <span class="k">return</span>
-    </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><p>I think it would be overkill to do this in a factory</p>
+    </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><p>Define our ViewModel (Todo: separate module?)</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">MandelbrotViewModel = </span><span class="nf">() -&gt;</span>
+      <span class="vi">@maxIterations = </span><span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span> <span class="mi">30</span>
+      <span class="vi">@loopColorsEvery = </span><span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span> <span class="mi">30</span>
+      <span class="k">return</span> <span class="k">this</span>
+    
+    <span class="nv">viewModel = </span><span class="k">new</span> <span class="nx">MandelbrotViewModel</span><span class="p">()</span>
+    </pre></div></td></tr><tr id="section-11"><td class="docs"><div class="pilwrap"><a href="#section-11" class="pilcrow">&#182;</a></div><p>I think it would be overkill to do this in a factory</p>
 </td><td class="code"><div class="highlight"><pre>    <span class="nv">core = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotCore</span><span class="p">()</span>
     <span class="nv">colorConverter = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ColorConverter</span><span class="p">()</span>
-    <span class="nv">colors = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotColors</span><span class="p">(</span><span class="nx">colorConverter</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-    <span class="nv">canvasElement = </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s">&#39;mandelbrot&#39;</span><span class="p">)</span>
-    <span class="nv">mandelbrot = </span><span class="k">new</span> <span class="nx">Mandelbrot</span><span class="p">(</span><span class="nx">core</span><span class="p">,</span> <span class="nx">colors</span><span class="p">,</span> <span class="nx">canvasElement</span><span class="p">)</span>
+    <span class="nv">colors = </span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MandelbrotColors</span> <span class="nx">colorConverter</span><span class="p">,</span> <span class="nx">viewModel</span><span class="p">.</span><span class="nx">maxIterations</span><span class="p">,</span> <span class="nx">viewModel</span><span class="p">.</span><span class="nx">loopColorsEvery</span>
+    <span class="nv">canvasElement = </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span> <span class="s">&#39;mandelbrot&#39;</span>
+    <span class="nv">mandelbrot = </span><span class="k">new</span> <span class="nx">Mandelbrot</span> <span class="nx">core</span><span class="p">,</span> <span class="nx">colors</span><span class="p">,</span> <span class="nx">canvasElement</span>
+  
+    <span class="nv">viewModel.drawSet = </span><span class="nx">mandelbrot</span><span class="p">.</span><span class="nx">drawSet</span>
+    <span class="nv">viewModel.viewAsImage = </span><span class="nf">() -&gt;</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nv">location = </span><span class="nx">colors</span><span class="p">.</span><span class="nx">cachedImage</span><span class="p">.</span><span class="nx">src</span>
+    <span class="nx">ko</span><span class="p">.</span><span class="nx">applyBindings</span> <span class="nx">viewModel</span>
+    
+    <span class="nx">mandelbrot</span><span class="p">.</span><span class="nx">drawSet</span><span class="p">()</span>
+
     <span class="k">return</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Wed Jun 20 2012 22:06:29 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Fri Jun 22 2012 17:48:02 GMT+0100 (BST)  </div></div></body></html>
