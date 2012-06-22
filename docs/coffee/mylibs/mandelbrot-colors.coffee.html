@@ -1,85 +1,86 @@
 <!DOCTYPE html><html><head><title>mandelbrot-colors.coffee</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../../index.html" class="source"><span class="file_name">README</span></a><a href="../../coffee/mylibs/color-converter.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">color-converter.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-colors.coffee.html" class="source selected"><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-colors.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-core.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-core.coffee</span></a><a href="../../coffee/mylibs/mandelbrot-worker.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot-worker.coffee</span></a><a href="../../coffee/mylibs/mandelbrot.coffee.html" class="source "><span class="base_path">coffee / mylibs / </span><span class="file_name">mandelbrot.coffee</span></a><a href="../../coffee/script.coffee.html" class="source "><span class="base_path">coffee / </span><span class="file_name">script.coffee</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>mandelbrot-colors.coffee</h1><div class="filepath">coffee/mylibs/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div><p>A class to deal with coloring mandelbrot plots</p>
-</td><td class="code"><div class="highlight"><pre><span class="k">class</span> <span class="nx">MandelbrotColors</span>
-  </pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
-</td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>Assigns our colorConverter and sets up some defaults</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(@colorConverter, maxIterations, loopEvery) -&gt;</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Check that the passed in color converter looks kosher</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="k">throw</span> <span class="s">&quot;Cannot construct MandelbrotColors without a colorConverter that imlements colorToRgb({h:,s:,v:}).&quot;</span> <span class="nx">unless</span> <span class="nx">@colorConverter</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span><span class="o">?</span>
-    </pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Some preset coloring functions</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="vi">@coloringFunctions =</span>
-      <span class="nv">hue: </span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span>
-        <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span>
-          <span class="nv">h: </span><span class="mi">360</span><span class="o">*</span><span class="nx">i</span><span class="o">/</span><span class="mi">255</span>
-          <span class="nv">s: </span><span class="mi">1</span>
-          <span class="nv">v: </span><span class="mi">1</span>
-      <span class="nv">monochrome: </span><span class="nf">(i) -&gt;</span>
-        <span class="nv">r: </span><span class="nx">i</span>
-        <span class="nv">g: </span><span class="nx">i</span>
-        <span class="nv">b: </span><span class="nx">i</span>
-    </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Build the default color lookup table</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="nv">colorScheme = </span><span class="nx">generateColorScheme</span> <span class="nx">@coloringFunctions</span><span class="p">.</span><span class="nx">hue</span>
-    </pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Default settings</p>
-</td><td class="code"><div class="highlight"><pre>    <span class="vi">@settings =</span>
-      <span class="nv">isBinary: </span><span class="kc">false</span>
-      <span class="nv">maxIterations: </span><span class="nx">maxIterations</span>
-      <span class="nv">loopEvery: </span><span class="nx">loopEvery</span>
-      <span class="nv">insideSetColor:</span>
-        <span class="nv">r: </span><span class="mi">0</span>
-        <span class="nv">g: </span><span class="mi">0</span>
-        <span class="nv">b: </span><span class="mi">0</span>
-      <span class="nv">colorScheme: </span><span class="nx">colorScheme</span>
-    
-    <span class="vi">@cachedImage = </span><span class="k">new</span> <span class="nx">Image</span><span class="p">()</span>
-  </pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><h2>Public Methods</h2>
-</td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><h3>drawEscapeTimes</h3>
+</td><td class="code"><div class="highlight"><pre><span class="nb">window</span><span class="p">.</span><span class="nx">define</span> <span class="nf">() -&gt;</span>
+  <span class="k">class</span> <span class="nx">MandelbrotColors</span>
+    </pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>Constructor</h2>
+</td><td class="code"><div class="highlight"><pre>    </pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>Assigns our colorConverter and sets up some defaults</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">constructor: </span><span class="nf">(@colorConverter, maxIterations, loopEvery) -&gt;</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Check that the passed in color converter looks kosher</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="k">throw</span> <span class="s">&quot;Cannot construct MandelbrotColors without a colorConverter that imlements colorToRgb({h:,s:,v:}).&quot;</span> <span class="nx">unless</span> <span class="nx">@colorConverter</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span><span class="o">?</span>
+      </pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Some preset coloring functions</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="vi">@coloringFunctions =</span>
+        <span class="nv">hue: </span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="nx">@colorConverter</span><span class="p">.</span><span class="nx">colorToRgb</span>
+            <span class="nv">h: </span><span class="mi">360</span><span class="o">*</span><span class="nx">i</span><span class="o">/</span><span class="mi">255</span>
+            <span class="nv">s: </span><span class="mi">1</span>
+            <span class="nv">v: </span><span class="mi">1</span>
+        <span class="nv">monochrome: </span><span class="nf">(i) -&gt;</span>
+          <span class="nv">r: </span><span class="nx">i</span>
+          <span class="nv">g: </span><span class="nx">i</span>
+          <span class="nv">b: </span><span class="nx">i</span>
+      </pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Build the default color lookup table</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="nv">colorScheme = </span><span class="nx">generateColorScheme</span> <span class="nx">@coloringFunctions</span><span class="p">.</span><span class="nx">hue</span>
+      </pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Default settings</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="vi">@settings =</span>
+        <span class="nv">isBinary: </span><span class="kc">false</span>
+        <span class="nv">maxIterations: </span><span class="nx">maxIterations</span>
+        <span class="nv">loopEvery: </span><span class="nx">loopEvery</span>
+        <span class="nv">insideSetColor:</span>
+          <span class="nv">r: </span><span class="mi">0</span>
+          <span class="nv">g: </span><span class="mi">0</span>
+          <span class="nv">b: </span><span class="mi">0</span>
+        <span class="nv">colorScheme: </span><span class="nx">colorScheme</span>
+      
+      <span class="vi">@cachedImage = </span><span class="k">new</span> <span class="nx">Image</span><span class="p">()</span>
+    </pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><h2>Public Methods</h2>
+</td><td class="code"><div class="highlight"><pre>    </pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><h3>drawEscapeTimes</h3>
 
 <p>Takes a canvas context and draws the escape times</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">drawEscapeTimesInContext: </span><span class="p">(</span><span class="nx">escapeTimes</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="nv">width = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
-    <span class="nv">height = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
-    <span class="nv">imageData = </span><span class="nx">context</span><span class="p">.</span><span class="nx">createImageData</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
-    <span class="k">for</span> <span class="nx">row</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">height</span><span class="p">]</span>
-      <span class="nx">do</span> <span class="p">(</span><span class="nx">row</span><span class="p">)</span> <span class="o">=&gt;</span>
-        <span class="k">for</span> <span class="nx">column</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">width</span><span class="p">]</span>
-          <span class="nx">do</span><span class="p">(</span><span class="nx">column</span><span class="p">)</span> <span class="o">=&gt;</span>
-            <span class="nv">color = </span><span class="nx">getColor</span> <span class="nx">escapeTimes</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">column</span><span class="p">],</span> <span class="nx">@settings</span>
-            <span class="nx">setPixel</span> <span class="nx">imageData</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="p">,</span> <span class="mi">255</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="mi">0</span>
-    <span class="nx">context</span><span class="p">.</span><span class="nx">putImageData</span> <span class="nx">imageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-    <span class="nv">dataToCache = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span> <span class="s">&#39;image/png&#39;</span>
-    <span class="vi">@cachedImage.src = </span><span class="nx">dataToCache</span>
-
-  </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><h2>Private Methods</h2>
-</td><td class="code"><div class="highlight"><pre>  </pre></div></td></tr><tr id="section-11"><td class="docs"><div class="pilwrap"><a href="#section-11" class="pilcrow">&#182;</a></div><h3>generateColorScheme</h3>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">drawEscapeTimesInContext: </span><span class="p">(</span><span class="nx">escapeTimes</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nv">width = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span>
+      <span class="nv">height = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span>
+      <span class="nv">imageData = </span><span class="nx">context</span><span class="p">.</span><span class="nx">createImageData</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span>
+      <span class="k">for</span> <span class="nx">row</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">height</span><span class="p">]</span>
+        <span class="nx">do</span> <span class="p">(</span><span class="nx">row</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="k">for</span> <span class="nx">column</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">width</span><span class="p">]</span>
+            <span class="nx">do</span><span class="p">(</span><span class="nx">column</span><span class="p">)</span> <span class="o">=&gt;</span>
+              <span class="nv">color = </span><span class="nx">getColor</span> <span class="nx">escapeTimes</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">column</span><span class="p">],</span> <span class="nx">@settings</span>
+              <span class="nx">setPixel</span> <span class="nx">imageData</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">r</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">g</span><span class="p">,</span> <span class="nx">color</span><span class="p">.</span><span class="nx">b</span><span class="p">,</span> <span class="mi">255</span>
+              <span class="k">return</span> <span class="mi">0</span>
+          <span class="k">return</span> <span class="mi">0</span>
+      <span class="nx">context</span><span class="p">.</span><span class="nx">putImageData</span> <span class="nx">imageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+      <span class="nv">dataToCache = </span><span class="nx">context</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span> <span class="s">&#39;image/png&#39;</span>
+      <span class="vi">@cachedImage.src = </span><span class="nx">dataToCache</span>
+  
+    </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><h2>Private Methods</h2>
+</td><td class="code"><div class="highlight"><pre>    </pre></div></td></tr><tr id="section-11"><td class="docs"><div class="pilwrap"><a href="#section-11" class="pilcrow">&#182;</a></div><h3>generateColorScheme</h3>
 
 <p>Takes a coloring function and returns an array of 255 colors.
 This prevents us from having to execute a (potentially) expensive function for every pixel. </p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">generateColorScheme = </span><span class="nf">(func) -&gt;</span> <span class="nx">func</span> <span class="nx">i</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">255</span><span class="p">]</span>
-  </pre></div></td></tr><tr id="section-12"><td class="docs"><div class="pilwrap"><a href="#section-12" class="pilcrow">&#182;</a></div><h3>getColor</h3>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">generateColorScheme = </span><span class="nf">(func) -&gt;</span> <span class="nx">func</span> <span class="nx">i</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">255</span><span class="p">]</span>
+    </pre></div></td></tr><tr id="section-12"><td class="docs"><div class="pilwrap"><a href="#section-12" class="pilcrow">&#182;</a></div><h3>getColor</h3>
 
 <p>Get the color corresponding to this escape time</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">getColor = </span><span class="p">(</span><span class="nx">escapeTime</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="nv">maxIterations = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">maxIterations</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nx">escapeTime</span> <span class="o">&gt;=</span> <span class="nx">maxIterations</span>
-      <span class="k">return</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span>
-    <span class="k">else</span>
-      <span class="k">if</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">isBinary</span>
-        <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">getColor = </span><span class="p">(</span><span class="nx">escapeTime</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nv">maxIterations = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">maxIterations</span><span class="p">()</span>
+      <span class="k">if</span> <span class="nx">escapeTime</span> <span class="o">&gt;=</span> <span class="nx">maxIterations</span>
+        <span class="k">return</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">insideSetColor</span>
       <span class="k">else</span>
-        <span class="nv">loopEvery = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">loopEvery</span><span class="p">()</span>
-        <span class="nv">index = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="p">(</span><span class="nx">escapeTime</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">escapeTime</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">255</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span>
-        <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
-      <span class="k">return</span> <span class="nx">color</span>
-  </pre></div></td></tr><tr id="section-13"><td class="docs"><div class="pilwrap"><a href="#section-13" class="pilcrow">&#182;</a></div><h3>setPixel</h3>
+        <span class="k">if</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">isBinary</span>
+          <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+        <span class="k">else</span>
+          <span class="nv">loopEvery = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">loopEvery</span><span class="p">()</span>
+          <span class="nv">index = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="p">(</span><span class="nx">escapeTime</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">escapeTime</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="nx">loopEvery</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">255</span><span class="o">/</span><span class="nx">loopEvery</span><span class="p">)</span>
+          <span class="nv">color = </span><span class="nx">settings</span><span class="p">.</span><span class="nx">colorScheme</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nx">color</span>
+    </pre></div></td></tr><tr id="section-13"><td class="docs"><div class="pilwrap"><a href="#section-13" class="pilcrow">&#182;</a></div><h3>setPixel</h3>
 
 <p>Sets the color and opacity of a specific pixel</p>
-</td><td class="code"><div class="highlight"><pre>  <span class="nv">setPixel = </span><span class="nf">(imageData, x, y, r, g, b, a) -&gt;</span>
-    <span class="nv">index = </span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span> <span class="o">*</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">r</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">g</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">b</span>
-    <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">setPixel = </span><span class="nf">(imageData, x, y, r, g, b, a) -&gt;</span>
+      <span class="nv">index = </span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span> <span class="o">*</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>
+      <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">r</span>
+      <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">g</span>
+      <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">b</span>
+      <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span>
+  
+  <span class="k">return</span> <span class="nx">MandelbrotColors</span>
 
-<span class="nb">window</span><span class="p">.</span><span class="nv">MandelbrotColors = </span><span class="nx">MandelbrotColors</span>
-
-</pre></div></td></tr></tbody></table><div id="generated">generated Fri Jun 22 2012 17:48:02 GMT+0100 (BST)  </div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Fri Jun 22 2012 18:53:53 GMT+0100 (BST)  </div></div></body></html>
