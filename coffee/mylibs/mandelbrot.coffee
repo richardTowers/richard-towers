@@ -10,7 +10,7 @@ window.require [
     "mylibs/mandelbrot-colors"
   ],
   # A controller for the mandelbrot demo.
-  ($, modern, script, ko) ->
+  ($, modern, script, ko, mandelCoreClass, cConverterClass, mandelColorsClass) ->
     class Mandelbrot
       
       # ##Constructor
@@ -84,9 +84,9 @@ window.require [
     viewModel = new MandelbrotViewModel()
     
     # I think it would be overkill to do this in a factory
-    core = new window.MandelbrotCore()
-    colorConverter = new window.ColorConverter()
-    colors = new window.MandelbrotColors colorConverter, viewModel.maxIterations, viewModel.loopColorsEvery
+    core = new mandelCoreClass()
+    colorConverter = new cConverterClass()
+    colors = new mandelColorsClass colorConverter, viewModel.maxIterations, viewModel.loopColorsEvery
     canvasElement = document.getElementById 'mandelbrot'
     mandelbrot = new Mandelbrot core, colors, canvasElement
   
