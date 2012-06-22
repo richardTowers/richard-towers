@@ -1,5 +1,6 @@
 # A class to deal with coloring mandelbrot plots
 window.define () ->
+  "strict mode"
   class MandelbrotColors
     
     # ##Constructor

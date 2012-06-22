@@ -1,4 +1,5 @@
-self.define () ->
+this.define () ->
+  "strict mode"
   class MandelbrotCore
     # ## Constructor
     

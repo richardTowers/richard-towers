@@ -18,6 +18,7 @@
 #   * `0 <= red, green, blue <= 255` (values will be cropped to fit)
 
 window.define () ->
+  "strict mode"
   class ColorConverter
     # ##Public methods
     # ### colorToHsv

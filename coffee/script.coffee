@@ -8,7 +8,8 @@ window.require [
     "libs/bootstrap.min",
     "libs/prettify"
   ],
-  ($) ->
+  ($, modern, boot, pretty) ->
+    "strict mode"
     # Just in case one of the other scripts we've included has been naughty
     $ = jQuery
     

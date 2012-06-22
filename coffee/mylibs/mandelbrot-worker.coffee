@@ -2,6 +2,7 @@
 
 # A web worker to evaluate the mandelbrot function for a set of pixels.
 
+"strict mode"
 # We need MandelbrotCore to do the computations
 self.importScripts '../../js/libs/require.js'
 #self.importScripts '../../js/mylibs/mandelbrot-core.js'
