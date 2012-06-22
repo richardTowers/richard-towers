@@ -5,9 +5,9 @@ A personal website to showcase some interesting things that I've been playing wi
 
 ## Components:
 
-Uses [html5 boilerplate](http://html5boilerplate.com/), [twitter bootsrap](http://twitter.github.com/bootstrap/), [jQuery](http://jquery.com/), [prettify](http://code.google.com/p/google-code-prettify/), [modernizr](http://modernizr.com/), [qunit](https://github.com/jquery/qunit), [docco-husky](https://github.com/mbrevoort/docco-husky)
+Uses [html5 boilerplate](http://html5boilerplate.com/), [twitter bootsrap](http://twitter.github.com/bootstrap/), [jQuery](http://jquery.com/), [prettify](http://code.google.com/p/google-code-prettify/), [modernizr](http://modernizr.com/), [qunit](https://github.com/jquery/qunit), [docco-husky](https://github.com/mbrevoort/docco-husky), [require.js](http://requirejs.org/)
 
-Will probably soon use [knockout.js](http://knockoutjs.com/), [underscore.js](http://underscorejs.org/), [require.js](http://requirejs.org/)
+Will probably soon use [underscore.js](http://underscorejs.org/)
 
 Components maintain their original licenses.
 
