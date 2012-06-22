@@ -98,7 +98,7 @@
                 <label for="maxIterations">Maximum Iterations</label>
                 <input id="maxIterations" type="number" data-bind="value: maxIterations" min="0" max="100000" step="10"
                 rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
-                <button id="maxIterationsButton" class="btn"><i class="icon-refresh"></i> Recalculate</button>
+                <button data-bind="click: drawSet" class="btn"><i class="icon-refresh"></i> Recalculate</button>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
           </div>
           <canvas id="mandelbrot"></canvas>
           <div id="mandelbrotControls">
-            <button id="viewAsImage" class="btn pull-right"><i class="icon-picture"></i> View as image</button>
+            <button data-bind="click: viewAsImage" class="btn pull-right"><i class="icon-picture"></i> View as image</button>
           </div>
         </div>
       </div>

@@ -96,6 +96,9 @@
     canvasElement = document.getElementById('mandelbrot');
     mandelbrot = new Mandelbrot(core, colors, canvasElement);
     viewModel.drawSet = mandelbrot.drawSet;
+    viewModel.viewAsImage = function() {
+      return window.location = colors.cachedImage.src;
+    };
     ko.applyBindings(viewModel);
     mandelbrot.drawSet();
   });

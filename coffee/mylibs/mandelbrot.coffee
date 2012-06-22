@@ -91,6 +91,8 @@ window.require [
     mandelbrot = new Mandelbrot core, colors, canvasElement
   
     viewModel.drawSet = mandelbrot.drawSet
+    viewModel.viewAsImage = () ->
+        window.location = colors.cachedImage.src
     ko.applyBindings viewModel
     
     mandelbrot.drawSet()
