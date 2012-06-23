@@ -4,7 +4,7 @@ window.require [
     "jquery",
     "libs/modernizr-2.5.3-respond-1.1.0.min",
     "script",
-    "libs/knockout-2.1.0",
+    "libs/knockout-2.1.0.debug",
     "mylibs/mandelbrot-core",
     "mylibs/color-converter",
     "mylibs/mandelbrot-colors"
@@ -51,7 +51,10 @@ window.require [
                 switch data.message
                   when "progress"
                     #$('#mandelbrotProgress .bar').css 'width', data.value+'%'
-                    return
+                    newEvent = document.createEvent 'Event'
+                    newEvent.initEvent 'progress', true, true
+                    newEvent.data = event.data
+                    document.dispatchEvent newEvent
                   when "success"
                     @mandelbrotColors.drawEscapeTimesInContext(data.value, context)
                 ), false
@@ -81,7 +84,7 @@ window.require [
     MandelbrotViewModel = () ->
       @maxIterations = ko.observable 30
       @loopColorsEvery = ko.observable 30
-      @progress = ko.observable 50
+      @progress = ko.observable 0
       @inProgress = ko.computed () => @progress() < 100
       
       return this
@@ -99,6 +102,12 @@ window.require [
     viewModel.viewAsImage = () ->
         window.location = colors.cachedImage.src
     ko.applyBindings viewModel
+    
+    document.addEventListener 'progress',
+      ((event) ->
+        data = JSON.parse event.data
+        viewModel.progress(Math.floor data.value)
+      ), false
     
     mandelbrot.drawSet()
 
