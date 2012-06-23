@@ -37,8 +37,8 @@ window.define(function() {
       colorScheme = generateColorScheme(this.coloringFunctions.hue);
       this.settings = {
         isBinary: false,
-        maxIterations: maxIterations,
-        loopEvery: loopEvery,
+        maxIterations: maxIterations(),
+        loopEvery: loopEvery(),
         insideSetColor: {
           r: 0,
           g: 0,
@@ -87,14 +87,14 @@ window.define(function() {
 
     getColor = function(escapeTime, settings) {
       var color, index, loopEvery, maxIterations;
-      maxIterations = settings.maxIterations();
+      maxIterations = settings.maxIterations;
       if (escapeTime >= maxIterations) {
         return settings.insideSetColor;
       } else {
         if (settings.isBinary) {
           color = settings.colorScheme[0];
         } else {
-          loopEvery = settings.loopEvery();
+          loopEvery = settings.loopEvery;
           index = Math.floor((escapeTime - Math.floor(escapeTime / loopEvery) * loopEvery) * (255 / loopEvery));
           color = settings.colorScheme[index];
         }

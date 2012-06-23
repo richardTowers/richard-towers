@@ -28,8 +28,8 @@ window.define () ->
       # Default settings
       @settings =
         isBinary: false
-        maxIterations: maxIterations
-        loopEvery: loopEvery
+        maxIterations: maxIterations()
+        loopEvery: loopEvery()
         insideSetColor:
           r: 0
           g: 0
@@ -69,14 +69,14 @@ window.define () ->
     # ###getColor
     # Get the color corresponding to this escape time
     getColor = (escapeTime, settings) =>
-      maxIterations = settings.maxIterations()
+      maxIterations = settings.maxIterations
       if escapeTime >= maxIterations
         return settings.insideSetColor
       else
         if settings.isBinary
           color = settings.colorScheme[0] 
         else
-          loopEvery = settings.loopEvery()
+          loopEvery = settings.loopEvery
           index = Math.floor (escapeTime - Math.floor(escapeTime/loopEvery)*loopEvery)*(255/loopEvery)
           color = settings.colorScheme[index]
         return color
