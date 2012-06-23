@@ -50,7 +50,8 @@ window.require [
                 data = JSON.parse event.data
                 switch data.message
                   when "progress"
-                    $('#mandelbrotProgress .bar').css 'width', data.value+'%'
+                    #$('#mandelbrotProgress .bar').css 'width', data.value+'%'
+                    return
                   when "success"
                     @mandelbrotColors.drawEscapeTimesInContext(data.value, context)
                 ), false
@@ -80,6 +81,9 @@ window.require [
     MandelbrotViewModel = () ->
       @maxIterations = ko.observable 30
       @loopColorsEvery = ko.observable 30
+      @progress = ko.observable 50
+      @inProgress = ko.computed () => @progress() < 100
+      
       return this
     
     viewModel = new MandelbrotViewModel()

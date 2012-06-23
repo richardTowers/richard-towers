@@ -77,34 +77,32 @@
       
       <div class="row">
         <div class="span3">
-          <div class="visible-phone clearfix">
-            <a class="pull-right" data-toggle="collapse" data-target="#settingsGroup" href="#">Show/Hide Settings</a>
-          </div>
-          <div id="settingsGroup" class="collapse in">
-            <div id="colorSettings" class="well">
-              <h2>Colouring</h2>
-              <h3>Algorithm</h3>
-              <label>None<input type="radio" name="coloringAlgorithm" value="None" class="pull-right"></label>
+          <div class="well">
+            <h2>Settings <a class="pull-right" data-toggle="collapse" data-target="#settingsGroup" href="#"><i class="icon-chevron-up"></i><i class="icon-chevron-down"></i></a></h2>
+            <div id="settingsGroup" class="collapse in">
+              <h3>Colouring Algorithm</h3>
               <label>Escape Time<input type="radio" name="coloringAlgorithm" value="EscapeTime" class="pull-right" checked></label>
               <label>Smooth<input type="radio" name="coloringAlgorithm" value="Smooth" class="pull-right"></label>
-              <h3>Scheme</h3>
+              <h3>Colouring Scheme</h3>
               <label>Monochrome<input type="radio" name="coloringScheme" value="Monochrome" class="pull-right" checked></label>
               <label>Hue<input type="radio" name="coloringScheme" value="Hue" class="pull-right"></label>
               <label>Loop colours every:<input id="loopColorsEvery" type="number" data-bind="value: loopColorsEvery" placeholder="Iterations"></label>
-              <button data-bind="click: drawSet" class="btn"><i class="icon-refresh"></i> Redraw</button>
-            </div>
-            <div id="depthSettings" class="well">
-              <h2>Calculation</h2>
-                <label for="maxIterations">Maximum Iterations</label>
-                <input id="maxIterations" type="number" data-bind="value: maxIterations" min="0" max="100000" step="10"
-                rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
-                <button data-bind="click: drawSet" class="btn"><i class="icon-refresh"></i> Recalculate</button>
+              <h3>Calculation</h3>
+              <label for="maxIterations">Maximum Iterations</label>
+              <input id="maxIterations" type="number" data-bind="value: maxIterations" min="0" max="100000" step="10"
+              rel="tooltip" title="If you set the depth too high the set will take a long time to compute.">
+              <button data-bind="click: drawSet" class="btn"><i class="icon-refresh"></i> Recalculate</button>
             </div>
           </div>
         </div>
         <div class="span8">
-          <div id="mandelbrotProgress" class="progress instant-transition progress-striped active">
-            <div class="bar"></div>
+          <div id="mandelbrotProgress" data-bind="
+            css: {
+              active: inProgress(),
+              'progress-striped': inProgress(),
+              'progress-success': !inProgress()
+            }" class="progress instant-transition">
+            <div class="bar" data-bind="style: { width: progress() + '%' }"></div>
           </div>
           <canvas id="mandelbrot"></canvas>
           <div id="mandelbrotControls">

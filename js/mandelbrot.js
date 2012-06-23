@@ -48,7 +48,7 @@ window.require(["jquery", "libs/modernizr-2.5.3-respond-1.1.0.min", "script", "l
             data = JSON.parse(event.data);
             switch (data.message) {
               case "progress":
-                return $('#mandelbrotProgress .bar').css('width', data.value + '%');
+                break;
               case "success":
                 return _this.mandelbrotColors.drawEscapeTimesInContext(data.value, context);
             }
@@ -86,8 +86,13 @@ window.require(["jquery", "libs/modernizr-2.5.3-respond-1.1.0.min", "script", "l
 
   })();
   MandelbrotViewModel = function() {
+    var _this = this;
     this.maxIterations = ko.observable(30);
     this.loopColorsEvery = ko.observable(30);
+    this.progress = ko.observable(50);
+    this.inProgress = ko.computed(function() {
+      return _this.progress() < 100;
+    });
     return this;
   };
   viewModel = new MandelbrotViewModel();

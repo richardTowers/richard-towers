@@ -7486,7 +7486,7 @@ input {
   -o-transition: width 0s;
   transition: width 0s;
 }
-#colouringGroup input {
+#settingsGroup input {
   margin-right: 2px;
 }
 #mandelbrotControls button {
