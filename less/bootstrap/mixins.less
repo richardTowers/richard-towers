@@ -385,6 +385,15 @@
     background-repeat: no-repeat;
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@startColor,@endColor)); // IE9 and down, gets no color-stop at all for proper fallback
   }
+  .horizontal-three-colors(@startColor: #fff, @midColor: #000, @colorStop: 50%, @endColor: #fff) {
+    background: -moz-linear-gradient(left,  @startColor, @midColor, @endColor); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,@startColor), color-stop(@colorStop,@midColor), color-stop(100%,@endColor)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  @startColor 0%,@midColor @colorStop,@endColor 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  @startColor 0%, @midColor @colorStop, @endColor 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  @startColor 0%, @midColor @colorStop, @endColor 100%); /* IE10+ */
+    background: linear-gradient(left,  @startColor 0%, @midColor @colorStop, @endColor 100%); /* W3C */
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@startColor,@endColor)); /* IE6-9, not going to work :-(*/
+  }
   .radial(@innerColor: #555, @outerColor: #333)  {
     background-color: @outerColor;
     background-image: -webkit-gradient(radial, center center, 0, center center, 460, from(@innerColor), to(@outerColor));

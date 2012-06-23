@@ -84,8 +84,8 @@
               <label>Escape Time<input type="radio" name="coloringAlgorithm" value="EscapeTime" class="pull-right" checked></label>
               <label>Smooth<input type="radio" name="coloringAlgorithm" value="Smooth" class="pull-right"></label>
               <h3>Colouring Scheme</h3>
-              <label>Monochrome<input type="radio" name="coloringScheme" value="Monochrome" class="pull-right" checked></label>
-              <label>Hue<input type="radio" name="coloringScheme" value="Hue" class="pull-right"></label>
+              <label><span id="hue">&nbsp;</span><input type="radio" name="coloringScheme" value="Hue" class="pull-right" checked></label>
+              <label><span id="monochrome">&nbsp;</span><input type="radio" name="coloringScheme" value="Monochrome" class="pull-right"></label>
               <label>Loop colours every:<input id="loopColorsEvery" type="number" data-bind="value: loopColorsEvery" placeholder="Iterations"></label>
               <h3>Calculation</h3>
               <label for="maxIterations">Maximum Iterations</label>
@@ -98,7 +98,7 @@
         <div class="span8">
           <div id="mandelbrotProgress" data-bind="
             css: {
-              active: inProgress(),
+              'active': inProgress(),
               'progress-striped': inProgress(),
               'progress-success': !inProgress()
             }" class="progress instant-transition">
