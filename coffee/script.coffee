@@ -21,3 +21,4 @@ window.require [
       window.prettyPrint()
       # Set up [bootstrap tooltips](http://twitter.github.com/bootstrap/javascript.html#tooltips).
       $('[rel=tooltip]').tooltip({placement:'right'})
+      $('[rel=popover]').popover({placement:'top',html:true})

@@ -5,8 +5,12 @@ window.require(["jquery", "libs/modernizr-2.5.3-respond-1.1.0.min", "libs/bootst
   $ = jQuery;
   return $(function() {
     window.prettyPrint();
-    return $('[rel=tooltip]').tooltip({
+    $('[rel=tooltip]').tooltip({
       placement: 'right'
+    });
+    return $('[rel=popover]').popover({
+      placement: 'top',
+      html: true
     });
   });
 });
